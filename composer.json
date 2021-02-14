@@ -1,0 +1,32 @@
+{
+  "name": "apie/schema-generator",
+  "description": "Composer package of the apie library: schema generator",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pieter Jordaan",
+      "email": "pieter_jordaan@hotmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Apie\\SchemaGenerator\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Apie\\Tests\\SchemaGenerator\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.3",
+    "apie/schema-generator": "dev-main",
+    "apie/core": "dev-main"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
