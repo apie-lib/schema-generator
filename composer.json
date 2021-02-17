@@ -21,7 +21,6 @@
   },
   "require": {
     "php": ">=7.3",
-    "apie/schema-generator": "dev-main",
     "apie/core": "dev-main"
   },
   "require-dev": {
