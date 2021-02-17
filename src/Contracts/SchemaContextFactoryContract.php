@@ -8,5 +8,5 @@ use Apie\SchemaGenerator\Context\SchemaContext;
 
 interface SchemaContextFactoryContract
 {
-    public function create(): SchemaContext;
+    public function create(string $operation): SchemaContext;
 }

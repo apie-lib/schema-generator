@@ -14,15 +14,26 @@ class SchemaContextFactory implements SchemaContextFactoryContract
 
     private $predefined;
 
-    public function __construct(SchemaGeneratorContract $schemaGenerator, array $predefined = [])
-    {
+    public function __construct(
+        SchemaGeneratorContract $schemaGenerator,
+        array $predefined = []
+    ) {
         $this->schemaGenerator = $schemaGenerator;
         $this->predefined = $predefined;
     }
 
-    public function create(): SchemaContext
+    public function create(string $operation): SchemaContext
     {
-        $context = new SchemaContext($this->schemaGenerator);
+        $groups = ['base', $operation];
+        switch ($operation) {
+            case 'get':
+                $groups[] = 'read';
+                break;
+            case 'post':
+            case 'put':
+                $groups[] = 'write';
+        }
+        $context = new SchemaContext($this->schemaGenerator, $operation, $groups);
         foreach ($this->predefined as $className => $schema) {
             $context->register(new ReflectionClass($className), $schema);
         }

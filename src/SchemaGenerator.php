@@ -8,6 +8,7 @@ use Apie\SchemaGenerator\Context\SchemaContext;
 use Apie\SchemaGenerator\Contracts\SchemaGeneratorContract;
 use Apie\SchemaGenerator\Contracts\SchemaProvider;
 use ReflectionClass;
+use Symfony\Component\PropertyInfo\Type;
 
 class SchemaGenerator implements SchemaGeneratorContract
 {
@@ -15,9 +16,14 @@ class SchemaGenerator implements SchemaGeneratorContract
      * @var SchemaProvider[]
      */
     private $schemaProviders;
+    /**
+     * @var SchemaProvider
+     */
+    private $defaultProvider;
 
-    public function __construct(SchemaProvider... $schemaProviders)
+    public function __construct(SchemaProvider $defaultProvider, SchemaProvider... $schemaProviders)
     {
+        $this->defaultProvider = $defaultProvider;
         $this->schemaProviders = $schemaProviders;
     }
 
@@ -28,6 +34,16 @@ class SchemaGenerator implements SchemaGeneratorContract
                 return $schemaProvider->toSchema($class, $schemaContext);
             }
         }
-        // TODO exception
+        return $this->defaultProvider->toSchema($class, $schemaContext);
+    }
+
+    /**
+     * @param Type[] $types
+     * @param SchemaContext|null $schemaContext
+     * @return SchemaContract
+     */
+    public function fromTypesToSchema(array $types, ?SchemaContext $schemaContext = null): SchemaContract
+    {
+
     }
 }

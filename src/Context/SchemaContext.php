@@ -13,11 +13,19 @@ class SchemaContext
 {
     private $schemaGenerator;
 
+    private $groups;
+
+    private $recursion = 0;
+
     private $defined = [];
 
-    public function __construct(SchemaGeneratorContract $schemaGenerator)
+    private $operation;
+
+    public function __construct(SchemaGeneratorContract $schemaGenerator, string $operation, array $groups)
     {
         $this->schemaGenerator = $schemaGenerator;
+        $this->operation = $operation;
+        $this->groups = $groups;
     }
 
     public function register(ReflectionClass $class, ?SchemaContract $schema = null)
@@ -29,5 +37,29 @@ class SchemaContext
             $schema = $this->schemaGenerator->fromClassToSchema($class);
         }
         $this->defined[$class->name] = $schema;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroups(): array
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRecursion(): int
+    {
+        return $this->recursion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOperation(): string
+    {
+        return $this->operation;
     }
 }
