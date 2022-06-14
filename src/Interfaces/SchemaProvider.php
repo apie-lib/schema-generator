@@ -3,10 +3,10 @@ namespace Apie\SchemaGenerator\Interfaces;
 
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use cebe\openapi\spec\Components;
-use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
-interface SchemaProvider {
+interface SchemaProvider
+{
     public function supports(ReflectionClass $class): bool;
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,

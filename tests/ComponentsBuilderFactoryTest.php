@@ -47,7 +47,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'format' => 'slug',
                 'pattern' => 'yes'
             ]),
-            'Slug-post', 
+            'Slug-post',
             Slug::class
         ];
         yield [
@@ -57,7 +57,7 @@ class ComponentsBuilderFactoryTest extends TestCase
 
                 ]
             ]),
-            'DateTimeRange-post', 
+            'DateTimeRange-post',
             DateTimeRange::class
         ];
         yield [
@@ -65,7 +65,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'type' => 'string',
                 'enum' => [Gender::MALE->value, Gender::FEMALE->value],
             ]),
-            'Gender-post', 
+            'Gender-post',
             Gender::class
         ];
         yield [

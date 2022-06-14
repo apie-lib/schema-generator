@@ -12,6 +12,6 @@ class ICanNotExtractASchemaFromClassException extends RuntimeException
                 'I can not extract an OpenAPI Schema from class "%s"',
                 $className
             )
-            );
+        );
     }
 }

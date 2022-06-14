@@ -5,7 +5,6 @@ use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\EnumSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
-use cebe\openapi\spec\Components;
 
 class ComponentsBuilderFactory
 {

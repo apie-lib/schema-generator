@@ -3,15 +3,14 @@ namespace Apie\SchemaGenerator\Builders;
 
 use Apie\Core\Exceptions\DuplicateIdentifierException;
 use Apie\Core\ValueObjects\Utils;
-use Apie\SchemaGenerator\ApieSchemaGenerator;
-use Apie\SchemaGenerator\ComponentsBuilderFactory;
 use Apie\SchemaGenerator\Exceptions\ICanNotExtractASchemaFromClassException;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
-class ComponentsBuilder {
+class ComponentsBuilder
+{
     /**
      * @var SchemaProvider[]
      */

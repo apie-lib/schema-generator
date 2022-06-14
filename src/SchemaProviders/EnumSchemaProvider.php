@@ -18,8 +18,7 @@ class EnumSchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         $className = $class->name;
         $cases = $className::cases();
         $firstCase = reset($cases);
@@ -36,7 +35,9 @@ class EnumSchemaProvider implements SchemaProvider
                     $schema->type = 'integer';
                 }
                 $schema->enum = array_column(
-                    array_map(function ($case) { return (array) $case; }, $cases),
+                    array_map(function ($case) {
+                        return (array) $case;
+                    }, $cases),
                     'value'
                 );
             }
