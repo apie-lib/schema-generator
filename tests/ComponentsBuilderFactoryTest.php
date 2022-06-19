@@ -4,8 +4,14 @@ namespace Apie\Tests\SchemaGenerator;
 use Apie\CommonValueObjects\Enums\Gender;
 use Apie\CommonValueObjects\Identifiers\Slug;
 use Apie\CommonValueObjects\Ranges\DateTimeRange;
+use Apie\Fixtures\Dto\DefaultExampleDto;
+use Apie\Fixtures\Dto\EmptyDto;
+use Apie\Fixtures\Dto\ExampleDto;
+use Apie\Fixtures\Dto\NullableExampleDto;
+use Apie\Fixtures\Dto\OptionalExampleDto;
 use Apie\Fixtures\Enums\EmptyEnum;
 use Apie\SchemaGenerator\ComponentsBuilderFactory;
+use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
 use PHPUnit\Framework\TestCase;
 
@@ -31,8 +37,8 @@ class ComponentsBuilderFactoryTest extends TestCase
         $components = $builder->getComponents();
         $schemas = $components->schemas;
         $this->assertNotEmpty($schemas);
-        $this->assertEquals($expectedKey, key($schemas));
-        $actualSchema = current($schemas);
+        $this->assertArrayHasKey($expectedKey, $schemas);
+        $actualSchema = $schemas[$expectedKey];
         if ($expected->pattern) {
             $expected->pattern = $actualSchema->pattern;
         }
@@ -54,8 +60,10 @@ class ComponentsBuilderFactoryTest extends TestCase
             new Schema([
                 'type' => 'object',
                 'properties' => [
-
-                ]
+                    'start' => new Reference(['$ref' => 'DateWithTimezone-post']),
+                    'end' => new Reference(['$ref' => 'DateWithTimezone-post']),
+                ],
+                'required' => ['start', 'end'],
             ]),
             'DateTimeRange-post',
             DateTimeRange::class
@@ -75,6 +83,97 @@ class ComponentsBuilderFactoryTest extends TestCase
             ]),
             'EmptyEnum-post',
             EmptyEnum::class,
+        ];
+        yield [
+            new Schema([
+                'type' => 'object',
+                'properties' => [
+                ],
+                'required' => [],
+            ]),
+            'EmptyDto-post',
+            EmptyDto::class,
+        ];
+        yield [
+            new Schema([
+                'type' => 'object',
+                'required' => [],
+                'properties' => [
+                    'string' => new Schema(['type' => 'string', 'nullable' => false]),
+                    'integer' => new Schema(['type' => 'integer', 'nullable' => false]),
+                    'floatingPoint' => new Schema(['type' => 'number', 'nullable' => false]),
+                    'trueOrFalse' => new Schema(['type' => 'bool', 'nullable' => false]),
+                    'mixed' => new Reference(['$ref' => 'mixed']),
+                    'noType' => new Reference(['$ref' => 'mixed']),
+                    'gender' => new Reference(['$ref' => 'Gender-post']),
+                ],
+            ]),
+            'DefaultExampleDto-post',
+            DefaultExampleDto::class,
+        ];
+        yield [
+            new Schema([
+                'type' => 'object',
+                'required' => [
+                    'string',
+                    'integer',
+                    'floatingPoint',
+                    'trueOrFalse',
+                    'mixed',
+                    'noType',
+                    'gender',
+                ],
+                'properties' => [
+                    'string' => new Schema(['type' => 'string', 'nullable' => false]),
+                    'integer' => new Schema(['type' => 'integer', 'nullable' => false]),
+                    'floatingPoint' => new Schema(['type' => 'number', 'nullable' => false]),
+                    'trueOrFalse' => new Schema(['type' => 'bool', 'nullable' => false]),
+                    'mixed' => new Reference(['$ref' => 'mixed']),
+                    'noType' => new Reference(['$ref' => 'mixed']),
+                    'gender' => new Reference(['$ref' => 'Gender-post']),
+                ],
+            ]),
+            'ExampleDto-post',
+            ExampleDto::class,
+        ];
+        yield [
+            new Schema([
+                'type' => 'object',
+                'required' => [
+                    'nullableString',
+                    'nullableInteger',
+                    'nullableFloatingPoint',
+                    'nullableTrueOrFalse',
+                    'nullableGender',
+                ],
+                'properties' => [
+                    'nullableString' => new Schema(['type' => 'string', 'nullable' => true]),
+                    'nullableInteger' => new Schema(['type' => 'integer', 'nullable' => true]),
+                    'nullableFloatingPoint' => new Schema(['type' => 'number', 'nullable' => true]),
+                    'nullableTrueOrFalse' => new Schema(['type' => 'bool', 'nullable' => true]),
+                    'nullableGender' => new Reference(['$ref' => 'Gender-post']),
+                ],
+            ]),
+            'NullableExampleDto-post',
+            NullableExampleDto::class,
+        ];
+        yield [
+            new Schema([
+                'type' => 'object',
+                'required' => [
+                ],
+                'properties' => [
+                    'optionalString' => new Schema(['type' => 'string', 'nullable' => true]),
+                    'optionalInteger' => new Schema(['type' => 'integer', 'nullable' => true]),
+                    'optionalFloatingPoint' => new Schema(['type' => 'number', 'nullable' => true]),
+                    'optionalTrueOrFalse' => new Schema(['type' => 'bool', 'nullable' => true]),
+                    'mixed' => new Reference(['$ref' => 'mixed']),
+                    'noType' => new Reference(['$ref' => 'mixed']),
+                    'optionalGender' => new Reference(['$ref' => 'Gender-post']),
+                ],
+            ]),
+            'OptionalExampleDto-post',
+            OptionalExampleDto::class,
         ];
     }
 }
