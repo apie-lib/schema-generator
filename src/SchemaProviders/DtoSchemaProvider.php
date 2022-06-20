@@ -9,7 +9,6 @@ use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 use ReflectionProperty;
-use UnitEnum;
 
 class DtoSchemaProvider implements SchemaProvider
 {
@@ -53,7 +52,7 @@ class DtoSchemaProvider implements SchemaProvider
 
     private function isOptional(ReflectionProperty $property)
     {
-         // properties without a typehint always have default value null....
+        // properties without a typehint always have default value null....
         if (!$property->hasType() && $property->getDefaultValue() !== null) {
             return true;
         }

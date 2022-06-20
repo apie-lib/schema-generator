@@ -8,7 +8,8 @@ use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
-class CompositeValueObjectSchemaProvider implements SchemaProvider {
+class CompositeValueObjectSchemaProvider implements SchemaProvider
+{
     public function supports(ReflectionClass $class): bool
     {
         return in_array(CompositeValueObject::class, $class->getTraitNames());

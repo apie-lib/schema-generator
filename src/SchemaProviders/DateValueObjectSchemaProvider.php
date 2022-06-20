@@ -2,10 +2,7 @@
 namespace Apie\SchemaGenerator\SchemaProviders;
 
 use Apie\Core\RegexUtils;
-use Apie\Core\ValueObjects\Interfaces\HasRegexValueObjectInterface;
-use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
 use Apie\Core\ValueObjects\Interfaces\TimeRelatedValueObjectInterface;
-use Apie\Core\ValueObjects\Utils;
 use Apie\DateformatToRegex\DateFormatToRegex;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
