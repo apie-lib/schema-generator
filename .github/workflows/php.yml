@@ -1,9 +1,5 @@
 name: PHP Composer
 
-
-env:
-  COMPOSER_ROOT_TOKEN: dev-main
-
 on:
   push:
     branches: [main]
