@@ -5,10 +5,14 @@ use Apie\Core\Exceptions\DuplicateIdentifierException;
 use Apie\Core\ValueObjects\Utils;
 use Apie\SchemaGenerator\Exceptions\ICanNotExtractASchemaFromClassException;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
+use Apie\SchemaGenerator\Other\MethodSchemaInfo;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionUnionType;
 
 class ComponentsBuilder
 {
@@ -46,6 +50,43 @@ class ComponentsBuilder
         
         $this->components->schemas = $schemas;
         return $this;
+    }
+
+    public function getSchemaForMethod(ReflectionMethod $method): MethodSchemaInfo
+    {
+        $returnValue = new MethodSchemaInfo();
+        foreach ($method->getParameters() as $parameter) {
+            if (!$parameter->isDefaultValueAvailable() && !$parameter->allowsNull()) {
+                $returnValue->required[] = $parameter->name;
+            }
+            $type = $parameter->getType();
+            $returnValue->schemas[$parameter->name] = $this->getSchemaForType($type, $parameter->isVariadic());
+        }
+        return $returnValue;
+    }
+
+    public function getSchemaForType(ReflectionNamedType|ReflectionUnionType|null $type, bool $array = false): Schema|Reference
+    {
+        $result = $this->getMixedReference();
+        if ($type instanceof ReflectionUnionType) {
+            $oneOfs = [];
+            foreach ($type->getTypes() as $oneOfType) {
+                $oneOfs[] = $this->addCreationSchemaFor($oneOfType->getName());
+            }
+            $result = new Schema([
+                'type' => 'object',
+                'oneOf' => $oneOfs,
+            ]);
+        } elseif ($type instanceof ReflectionNamedType) {
+            $result = $this->addCreationSchemaFor($type->getName());
+        }
+        if ($array) {
+            return new Schema([
+                'type' => 'array',
+                'items' => $result,
+            ]);
+        }
+        return $result;
     }
 
     public function addCreationSchemaFor(string $class): Reference|Schema

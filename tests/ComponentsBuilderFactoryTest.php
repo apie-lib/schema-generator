@@ -9,6 +9,7 @@ use Apie\Fixtures\Dto\EmptyDto;
 use Apie\Fixtures\Dto\ExampleDto;
 use Apie\Fixtures\Dto\NullableExampleDto;
 use Apie\Fixtures\Dto\OptionalExampleDto;
+use Apie\Fixtures\Entities\UserWithAddress;
 use Apie\Fixtures\Enums\EmptyEnum;
 use Apie\SchemaGenerator\ComponentsBuilderFactory;
 use cebe\openapi\spec\Reference;
@@ -47,7 +48,7 @@ class ComponentsBuilderFactoryTest extends TestCase
 
     public function valueObjectProviders()
     {
-        yield [
+        yield 'string value object' => [
             new Schema([
                 'type' => 'string',
                 'format' => 'slug',
@@ -56,7 +57,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'Slug-post',
             Slug::class
         ];
-        yield [
+        yield 'date time range object' => [
             new Schema([
                 'type' => 'object',
                 'properties' => [
@@ -68,7 +69,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'DateTimeRange-post',
             DateTimeRange::class
         ];
-        yield [
+        yield 'PHP8.1 enums' => [
             new Schema([
                 'type' => 'string',
                 'enum' => [Gender::MALE->value, Gender::FEMALE->value],
@@ -76,7 +77,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'Gender-post',
             Gender::class
         ];
-        yield [
+        yield 'Empty Enum' => [
             new Schema([
                 'type' => 'string',
                 'enum' => [],
@@ -84,7 +85,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'EmptyEnum-post',
             EmptyEnum::class,
         ];
-        yield [
+        yield 'Empty DTO' => [
             new Schema([
                 'type' => 'object',
                 'properties' => [
@@ -94,7 +95,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'EmptyDto-post',
             EmptyDto::class,
         ];
-        yield [
+        yield 'DTO with optional fields' => [
             new Schema([
                 'type' => 'object',
                 'required' => [],
@@ -111,7 +112,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'DefaultExampleDto-post',
             DefaultExampleDto::class,
         ];
-        yield [
+        yield 'DTO with required fields' => [
             new Schema([
                 'type' => 'object',
                 'required' => [
@@ -136,7 +137,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'ExampleDto-post',
             ExampleDto::class,
         ];
-        yield [
+        yield 'DTO with nullable, required fields' => [
             new Schema([
                 'type' => 'object',
                 'required' => [
@@ -157,7 +158,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             'NullableExampleDto-post',
             NullableExampleDto::class,
         ];
-        yield [
+        yield 'DTO with nullable, optional fields' => [
             new Schema([
                 'type' => 'object',
                 'required' => [
@@ -174,6 +175,20 @@ class ComponentsBuilderFactoryTest extends TestCase
             ]),
             'OptionalExampleDto-post',
             OptionalExampleDto::class,
+        ];
+        yield 'Entity with constructor arguments' => [
+            new Schema([
+                'type' => 'object',
+                'required' => [
+                    'address',
+                ],
+                'properties' => [
+                    'address' => new Reference(['$ref' => 'AddressWithZipcodeCheck-post']),
+                    'password' => new Reference(['$ref' => 'Password-post']),
+                ],
+            ]),
+            'UserWithAddress-post',
+            UserWithAddress::class,
         ];
     }
 }

@@ -16,6 +16,7 @@ class DtoSchemaProvider implements SchemaProvider
     {
         return $class->implementsInterface(DtoInterface::class);
     }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
