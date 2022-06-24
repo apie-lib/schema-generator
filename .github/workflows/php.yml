@@ -33,7 +33,13 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Run test suite
-      run: vendor/bin/phpunit tests --coverage-clover=coverage.xml --coverage-html=coverage
+      run: vendor/bin/phpunit tests --coverage-clover=clover.xml --coverage-html=coverage
+
+    - name: phpunit-coverage-badge
+      uses: timkrase/phpunit-coverage-badge@v1.2.0
+      with:
+        push_badge: true
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: actions/upload-artifact@v3
       with:
@@ -43,4 +49,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: Code coverage (Clover xml)
-        path: coverage.xml
+        path: clover.xml
