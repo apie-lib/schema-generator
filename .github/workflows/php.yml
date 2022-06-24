@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        coverage: pcov
+        ini-values: pcov.directory=src
     - uses: actions/checkout@v2
 
     - name: Sleep for 30 seconds
