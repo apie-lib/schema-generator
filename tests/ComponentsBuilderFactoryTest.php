@@ -2,7 +2,7 @@
 namespace Apie\Tests\SchemaGenerator;
 
 use Apie\CommonValueObjects\Enums\Gender;
-use Apie\CommonValueObjects\Identifiers\Slug;
+use Apie\CommonValueObjects\Identifiers\Identifier;
 use Apie\CommonValueObjects\Ranges\DateTimeRange;
 use Apie\Fixtures\Dto\DefaultExampleDto;
 use Apie\Fixtures\Dto\EmptyDto;
@@ -51,11 +51,11 @@ class ComponentsBuilderFactoryTest extends TestCase
         yield 'string value object' => [
             new Schema([
                 'type' => 'string',
-                'format' => 'slug',
+                'format' => 'identifier',
                 'pattern' => 'yes'
             ]),
-            'Slug-post',
-            Slug::class
+            'Identifier-post',
+            Identifier::class
         ];
         yield 'date time range object' => [
             new Schema([
