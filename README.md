@@ -90,3 +90,27 @@ It tries to figure out what value objects the object is. For example if it uses 
 - If it implements HasRegexValueObjectInterface, pattern is filled in.
 - If it implements StringValueObjectInterface, type is filled in as string and the format is the name of the class without namespace.
 - If the class uses the CompositeValueObject trait, it will be mapped as an object.
+
+### Complete customization
+You can add SchemaMethod attribute to a class and add a static method class to specify an openAPI schema for a class.
+
+```php
+<?php
+use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
+use Apie\Core\ValueObjects\IsStringValueObject;
+
+#[SchemaMethod('getSchema')]
+class Example implements StringValueObject {
+    use IsStringValueObject;
+
+    public static function getSchema(): array
+    {
+        return [
+            'type' => 'string',
+            'format' => 'password',
+            'max' => 12,
+        ];
+    }
+}
+```
+The method can return an instance of cebe\Openapi\Schema (you require cebe/php-openapi") or return an array of the schema.
