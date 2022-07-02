@@ -74,7 +74,6 @@ class ComponentsBuilder
                 $oneOfs[] = $this->addCreationSchemaFor($oneOfType->getName());
             }
             $result = new Schema([
-                'type' => 'object',
                 'oneOf' => $oneOfs,
             ]);
         } elseif ($type instanceof ReflectionNamedType) {
