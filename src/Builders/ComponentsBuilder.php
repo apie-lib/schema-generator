@@ -91,6 +91,8 @@ class ComponentsBuilder
     public function addCreationSchemaFor(string $class): Reference|Schema
     {
         switch ($class) {
+            case 'mixed':
+                return $this->getMixedReference();
             case 'string':
             case 'bool':
                 return new Schema(['type' => $class]);

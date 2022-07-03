@@ -2,8 +2,6 @@
 namespace Apie\Tests\SchemaGenerator;
 
 use Apie\CommonValueObjects\Enums\Gender;
-use Apie\CommonValueObjects\Identifiers\Identifier;
-use Apie\CommonValueObjects\Ranges\DateTimeRange;
 use Apie\Fixtures\Dto\DefaultExampleDto;
 use Apie\Fixtures\Dto\EmptyDto;
 use Apie\Fixtures\Dto\ExampleDto;

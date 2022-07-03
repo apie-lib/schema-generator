@@ -10,7 +10,8 @@ use cebe\openapi\spec\Discriminator;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
-class PolymorphicEntitySchemaProvider implements SchemaProvider {
+class PolymorphicEntitySchemaProvider implements SchemaProvider
+{
     public function supports(ReflectionClass $class): bool
     {
         if (!$class->implementsInterface(PolymorphicEntityInterface::class)) {
