@@ -8,6 +8,7 @@ use Apie\SchemaGenerator\SchemaProviders\DateValueObjectSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DtoSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\EntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\EnumSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
 
@@ -27,6 +28,7 @@ class ComponentsBuilderFactory
     {
         return new self(
             new SchemaAttributeProvider(),
+            new PolymorphicEntitySchemaProvider(),
             new DtoSchemaProvider(),
             new EntitySchemaProvider(),
             new CompositeValueObjectSchemaProvider(),

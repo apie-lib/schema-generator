@@ -9,9 +9,12 @@ use Apie\Fixtures\Dto\EmptyDto;
 use Apie\Fixtures\Dto\ExampleDto;
 use Apie\Fixtures\Dto\NullableExampleDto;
 use Apie\Fixtures\Dto\OptionalExampleDto;
+use Apie\Fixtures\Entities\Polymorphic\Animal;
+use Apie\Fixtures\Entities\Polymorphic\Cow;
 use Apie\Fixtures\Entities\UserWithAddress;
 use Apie\Fixtures\Enums\EmptyEnum;
 use Apie\SchemaGenerator\ComponentsBuilderFactory;
+use cebe\openapi\spec\Discriminator;
 use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
 use PHPUnit\Framework\TestCase;
@@ -48,27 +51,6 @@ class ComponentsBuilderFactoryTest extends TestCase
 
     public function valueObjectProviders()
     {
-        yield 'string value object' => [
-            new Schema([
-                'type' => 'string',
-                'format' => 'identifier',
-                'pattern' => 'yes'
-            ]),
-            'Identifier-post',
-            Identifier::class
-        ];
-        yield 'date time range object' => [
-            new Schema([
-                'type' => 'object',
-                'properties' => [
-                    'start' => new Reference(['$ref' => 'DateWithTimezone-post']),
-                    'end' => new Reference(['$ref' => 'DateWithTimezone-post']),
-                ],
-                'required' => ['start', 'end'],
-            ]),
-            'DateTimeRange-post',
-            DateTimeRange::class
-        ];
         yield 'PHP8.1 enums' => [
             new Schema([
                 'type' => 'string',
@@ -189,6 +171,38 @@ class ComponentsBuilderFactoryTest extends TestCase
             ]),
             'UserWithAddress-post',
             UserWithAddress::class,
+        ];
+
+        yield 'Polymorphic relation' => [
+            new Schema([
+                'oneOf' => [
+                    new Reference(['$ref' => 'Cow-post']),
+                    new Reference(['$ref' => 'Elephant-post']),
+                    new Reference(['$ref' => 'Fish-post']),
+                ],
+                'discriminator' => new Discriminator([
+                    'propertyName' => 'type',
+                    'mapping' => [
+                        'cow' => new Reference(['$ref' => 'Cow-post']),
+                        'elephant' => new Reference(['$ref' => 'Elephant-post']),
+                        'fish' => new Reference(['$ref' => 'Fish-post']),
+                    ]
+                ])
+            ]),
+            'Animal-post',
+            Animal::class,
+        ];
+
+        yield 'Polymorphic relation - child' => [
+            new Schema([
+                'type' => 'object',
+                'properties' => [
+                    'id' => new Reference(['$ref' => 'AnimalIdentifier-post']),
+                ],
+                'required' => [],
+            ]),
+            'Cow-post',
+            Cow::class,
         ];
     }
 }
