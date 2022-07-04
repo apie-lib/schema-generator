@@ -179,7 +179,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                     new Reference(['$ref' => 'Fish-post']),
                 ],
                 'discriminator' => new Discriminator([
-                    'propertyName' => 'type',
+                    'propertyName' => 'animalType',
                     'mapping' => [
                         'cow' => new Reference(['$ref' => 'Cow-post']),
                         'elephant' => new Reference(['$ref' => 'Elephant-post']),

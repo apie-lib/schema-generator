@@ -31,13 +31,13 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
         $discriminatorMapping = $method->invoke(null);
         foreach ($discriminatorMapping->getConfigs() as $config) {
             $key = $config->getDiscriminator();
-            $value = $componentsBuilder->addCreationSchemaFor($config->getClassName());
+            $value = $componentsBuilder->addCreationSchemaFor($config->getClassName(), $discriminatorMapping->getPropertyName());
             $relations[$key] = $value;
         }
         $schema = new Schema([
             'oneOf' => array_values($relations),
             'discriminator' => new Discriminator([
-                'propertyName' => 'type',
+                'propertyName' => $discriminatorMapping->getPropertyName(),
                 'mapping' => $relations,
             ]),
         ]);

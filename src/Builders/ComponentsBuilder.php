@@ -88,7 +88,7 @@ class ComponentsBuilder
         return $result;
     }
 
-    public function addCreationSchemaFor(string $class): Reference|Schema
+    public function addCreationSchemaFor(string $class, ?string $discriminatorColumn = null): Reference|Schema
     {
         switch ($class) {
             case 'mixed':
