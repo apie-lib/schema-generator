@@ -8,6 +8,7 @@ use Apie\SchemaGenerator\SchemaProviders\DateValueObjectSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DtoSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\EntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\EnumSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\ItemHashmapSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemListSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
@@ -30,6 +31,7 @@ class ComponentsBuilderFactory
         return new self(
             new SchemaAttributeProvider(),
             new ItemListSchemaProvider(),
+            new ItemHashmapSchemaProvider(),
             new PolymorphicEntitySchemaProvider(),
             new DtoSchemaProvider(),
             new EntitySchemaProvider(),
