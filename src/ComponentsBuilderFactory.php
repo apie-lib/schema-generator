@@ -13,6 +13,7 @@ use Apie\SchemaGenerator\SchemaProviders\ItemListSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\ValueObjectSchemaProvider;
 
 class ComponentsBuilderFactory
 {
@@ -38,6 +39,7 @@ class ComponentsBuilderFactory
             new CompositeValueObjectSchemaProvider(),
             new DateValueObjectSchemaProvider(),
             new StringValueObjectSchemaProvider(),
+            new ValueObjectSchemaProvider(),
             new EnumSchemaProvider()
         );
     }

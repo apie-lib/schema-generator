@@ -8,9 +8,9 @@ This package is part of the [Apie](https://github.com/apie-lib) library.
 The code is maintained in a monorepo, so PR's need to be sent to the [monorepo](https://github.com/apie-lib/apie-lib-monorepo/pulls)
 
 ## Documentation
-The schema generator creates a JSON Schema from an object with typehints. It supports entities, value objects and DTO made for Apie. It returns objects made with the library [cebe/php-openapi](https://github.com/cebe/php-openapi).
+The schema generator creates a JSON Schema from an object with typehints. It supports entities, lists, hashmaps, value objects and DTO made for Apie. It returns objects made with the library [cebe/php-openapi](https://github.com/cebe/php-openapi).
 
-This library does not generate an entier OpenAPI schema, but instead it just creates the JSON schema section of all the objects.
+This library does not generate an entire OpenAPI schema, but instead it just creates the JSON schema section of all the objects.
 
 ### Standard usage
 In general you make multiple schemas for multiple objects with references. Because of that we basically create a [Components section](https://spec.openapis.org/oas/v3.1.0#components-object)
@@ -85,7 +85,7 @@ unless it has a default value.
 For all methods starting with set or with it expects the last argument to be the type needed. Other arguments are considered for contextual reasons (like being authenticated or the current locale).
 
 ### Value Objects
-It tries to figure out what value objects the object is. For example if it uses one of the standard traits it will map those to objects or strings.
+It tries to figure out what value objects the object is. For example if it uses one of the standard traits it will map those to objects or strings or read the toNative() return typehint.
 
 - If it implements HasRegexValueObjectInterface, pattern is filled in.
 - If it implements StringValueObjectInterface, type is filled in as string and the format is the name of the class without namespace.
