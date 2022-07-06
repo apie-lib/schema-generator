@@ -3,9 +3,7 @@ namespace Apie\SchemaGenerator\SchemaProviders;
 
 use Apie\Core\RegexUtils;
 use Apie\Core\ValueObjects\Interfaces\HasRegexValueObjectInterface;
-use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
 use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
-use Apie\Core\ValueObjects\Utils;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
