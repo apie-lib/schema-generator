@@ -1,4 +1,10 @@
-# schema-generator
+<img src="/docs/apie-logo.svg" width="100px" align="left" />
+<h1>schema-generator</h1>
+
+
+
+
+
 
  [![Latest Stable Version](http://poser.pugx.org/apie/schema-generator/v)](https://packagist.org/packages/apie/schema-generator) [![Total Downloads](http://poser.pugx.org/apie/schema-generator/downloads)](https://packagist.org/packages/apie/schema-generator) [![Latest Unstable Version](http://poser.pugx.org/apie/schema-generator/v/unstable)](https://packagist.org/packages/apie/schema-generator) [![License](http://poser.pugx.org/apie/schema-generator/license)](https://packagist.org/packages/apie/schema-generator) [![PHP Version Require](http://poser.pugx.org/apie/schema-generator/require/php)](https://packagist.org/packages/apie/schema-generator) ![Code coverage](https://raw.githubusercontent.com/apie-lib/schema-generator/main/coverage_badge.svg) 
 
