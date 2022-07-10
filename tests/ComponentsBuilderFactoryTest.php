@@ -1,7 +1,6 @@
 <?php
 namespace Apie\Tests\SchemaGenerator;
 
-use Apie\CommonValueObjects\Enums\Gender;
 use Apie\Fixtures\Dto\DefaultExampleDto;
 use Apie\Fixtures\Dto\EmptyDto;
 use Apie\Fixtures\Dto\ExampleDto;
@@ -10,7 +9,10 @@ use Apie\Fixtures\Dto\OptionalExampleDto;
 use Apie\Fixtures\Entities\Polymorphic\Animal;
 use Apie\Fixtures\Entities\Polymorphic\Cow;
 use Apie\Fixtures\Entities\UserWithAddress;
+use Apie\Fixtures\Enums\ColorEnum;
 use Apie\Fixtures\Enums\EmptyEnum;
+use Apie\Fixtures\Enums\IntEnum;
+use Apie\Fixtures\Enums\NoValueEnum;
 use Apie\SchemaGenerator\ComponentsBuilderFactory;
 use cebe\openapi\spec\Discriminator;
 use cebe\openapi\spec\Reference;
@@ -49,13 +51,13 @@ class ComponentsBuilderFactoryTest extends TestCase
 
     public function valueObjectProviders()
     {
-        yield 'PHP8.1 enums' => [
+        yield 'Backed string enum' => [
             new Schema([
                 'type' => 'string',
-                'enum' => [Gender::MALE->value, Gender::FEMALE->value],
+                'enum' => ['red', 'green', 'blue'],
             ]),
-            'Gender-post',
-            Gender::class
+            'ColorEnum-post',
+            ColorEnum::class
         ];
         yield 'Empty Enum' => [
             new Schema([
@@ -64,6 +66,22 @@ class ComponentsBuilderFactoryTest extends TestCase
             ]),
             'EmptyEnum-post',
             EmptyEnum::class,
+        ];
+        yield 'Backed int Enum' => [
+            new Schema([
+                'type' => 'integer',
+                'enum' => [0, 1, 2],
+            ]),
+            'IntEnum-post',
+            IntEnum::class,
+        ];
+        yield 'Enum without values' => [
+            new Schema([
+                'type' => 'string',
+                'enum' => ['RED', 'GREEN', 'BLUE'],
+            ]),
+            'NoValueEnum-post',
+            NoValueEnum::class
         ];
         yield 'Empty DTO' => [
             new Schema([

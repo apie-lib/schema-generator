@@ -25,7 +25,7 @@ class EnumSchemaProvider implements SchemaProvider
         $schema = new Schema(
             [
                 'type' => 'string',
-                'enum' => array_keys($cases),
+                'enum' => [],
             ]
         );
         if ($firstCase) {
@@ -39,6 +39,13 @@ class EnumSchemaProvider implements SchemaProvider
                         return (array) $case;
                     }, $cases),
                     'value'
+                );
+            } else {
+                $schema->enum = array_column(
+                    array_map(function ($case) {
+                        return (array) $case;
+                    }, $cases),
+                    'name'
                 );
             }
         }
