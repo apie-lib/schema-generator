@@ -183,6 +183,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'properties' => [
                     'address' => new Reference(['$ref' => 'AddressWithZipcodeCheck-post']),
                     'password' => new Reference(['$ref' => 'Password-post']),
+                    'id' => new Reference(['$ref' => 'UserWithAddressIdentifier-post']),
                 ],
             ]),
             'UserWithAddress-post',
