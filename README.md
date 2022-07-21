@@ -24,7 +24,7 @@ In general you make multiple schemas for multiple objects with references. Becau
 Code example:
 ```php
 <?php
-use Apie\CommonValueObjects\Enums\Gender;
+use Apie\Fixtures\Enums\Gender;
 use Apie\CommonValueObjects\Ranges\DateTimeRange;
 use Apie\SchemaGenerator\ComponentsBuilderFactory;
 
