@@ -18,7 +18,7 @@ class ComponentsBuilderTest extends TestCase
     {
         $testItem = new ComponentsBuilder();
         $testItem->setSchema('Password-post', new Schema(['type' => 'object']));
-        $this->assertEquals(new Reference(['$ref' => 'Password-post']), $testItem->addCreationSchemaFor(Password::class));
+        $this->assertEquals(new Reference(['$ref' => '#/components/schemas/Password-post']), $testItem->addCreationSchemaFor(Password::class));
         $this->assertEquals(new Schema(['type' => 'string']), $testItem->addCreationSchemaFor('string'));
         $this->assertEquals(new Schema(['type' => 'bool']), $testItem->addCreationSchemaFor('bool'));
         $this->assertEquals(new Schema(['type' => 'integer']), $testItem->addCreationSchemaFor('int'));

@@ -35,8 +35,8 @@ $schema = $factory->addCreationSchemaFor(Gender::class);
  * $schema = [
  *     'type' => 'object',
  *     'properties' => [
- *          'start' => ['$ref' => 'DateWithTimezone-post'],
- *          'end' => ['$ref' => 'DateWithTimezone-post'],
+ *          'start' => ['$ref' => '#/components/schemas/DateWithTimezone-post'],
+ *          'end' => ['$ref' => '#/components/schemas/DateWithTimezone-post'],
  *     ]
  * ]
  */

@@ -32,7 +32,7 @@ class ComponentsBuilder
 
     public function getMixedReference(): Reference
     {
-        return new Reference(['$ref' => 'mixed']);
+        return new Reference(['$ref' => '#/components/schemas/mixed']);
     }
 
     public function getComponents(): Components
@@ -105,12 +105,12 @@ class ComponentsBuilder
         $refl = new ReflectionClass($class);
         $identifier = Utils::getDisplayNameForValueObject($refl) . '-post';
         if (isset($this->components->schemas[$identifier])) {
-            return new Reference(['$ref' => $identifier]);
+            return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
         }
         foreach ($this->schemaProviders as $schemaProvider) {
             if ($schemaProvider->supports($refl)) {
                 $this->components = $schemaProvider->addCreationSchemaFor($this, $identifier, $refl);
-                return new Reference(['$ref' => $identifier]);
+                return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
             }
         }
         throw new ICanNotExtractASchemaFromClassException($refl->name);
