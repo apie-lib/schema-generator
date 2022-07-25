@@ -65,19 +65,20 @@ class ComponentsBuilder
         return $returnValue;
     }
 
-    public function getSchemaForType(ReflectionNamedType|ReflectionUnionType|null $type, bool $array = false): Schema|Reference
+    public function getSchemaForType(ReflectionNamedType|ReflectionUnionType|null $type, bool $array = false, bool $display = false): Schema|Reference
     {
+        $methodName = $display ? 'addDisplaySchemaFor' : 'addCreationSchemaFor';
         $result = $this->getMixedReference();
         if ($type instanceof ReflectionUnionType) {
             $oneOfs = [];
             foreach ($type->getTypes() as $oneOfType) {
-                $oneOfs[] = $this->addCreationSchemaFor($oneOfType->getName());
+                $oneOfs[] = $this->$methodName($oneOfType->getName());
             }
             $result = new Schema([
                 'oneOf' => $oneOfs,
             ]);
         } elseif ($type instanceof ReflectionNamedType) {
-            $result = $this->addCreationSchemaFor($type->getName());
+            $result = $this->$methodName($type->getName());
         }
         if ($array) {
             return new Schema([
@@ -86,6 +87,34 @@ class ComponentsBuilder
             ]);
         }
         return $result;
+    }
+
+    public function addDisplaySchemaFor(string $class, ?string $discriminatorColumn = null): Reference|Schema
+    {
+        switch ($class) {
+            case 'mixed':
+                return $this->getMixedReference();
+            case 'string':
+            case 'bool':
+                return new Schema(['type' => $class]);
+            case 'int':
+                return new Schema(['type' => 'integer']);
+            case'float':
+            case 'double':
+                return new Schema(['type' => 'number']);
+        }
+        $refl = new ReflectionClass($class);
+        $identifier = Utils::getDisplayNameForValueObject($refl) . '-get';
+        if (isset($this->components->schemas[$identifier])) {
+            return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
+        }
+        foreach ($this->schemaProviders as $schemaProvider) {
+            if ($schemaProvider->supports($refl)) {
+                $this->components = $schemaProvider->addDisplaySchemaFor($this, $identifier, $refl);
+                return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
+            }
+        }
+        throw new ICanNotExtractASchemaFromClassException($refl->name);
     }
 
     public function addCreationSchemaFor(string $class, ?string $discriminatorColumn = null): Reference|Schema

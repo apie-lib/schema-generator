@@ -17,6 +17,41 @@ class DtoSchemaProvider implements SchemaProvider
         return $class->implementsInterface(DtoInterface::class);
     }
 
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        $required = [];
+        $properties = [];
+        foreach ($class->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+            /** @var ReflectionProperty $property */
+            $propertyName = $property->getName();
+            if (!$this->isOptional($property)) {
+                $required[] = $propertyName;
+            }
+            $type = $property->getType();
+            if (null === $type || 'mixed' === $type->getName()) {
+                $properties[$propertyName] = $componentsBuilder->getMixedReference();
+                continue;
+            }
+            $properties[$propertyName] = $componentsBuilder->addDisplaySchemaFor(
+                $type->getName()
+            );
+            if ($properties[$propertyName] instanceof Schema) {
+                $properties[$propertyName]->nullable = $type->allowsNull();
+            }
+        }
+        $schema = new Schema([
+            'type' => 'object',
+            'properties' => $properties,
+            'required' => $required,
+        ]);
+        $componentsBuilder->setSchema($componentIdentifier, $schema);
+        return $componentsBuilder->getComponents();
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

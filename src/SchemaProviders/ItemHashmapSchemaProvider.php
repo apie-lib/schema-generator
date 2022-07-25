@@ -14,6 +14,16 @@ class ItemHashmapSchemaProvider implements SchemaProvider
     {
         return $class->isSubclassOf(ItemHashmap::class) || $class->name === ItemHashmap::class;
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

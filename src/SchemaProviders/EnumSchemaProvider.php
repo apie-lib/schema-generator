@@ -14,6 +14,16 @@ class EnumSchemaProvider implements SchemaProvider
     {
         return $class->implementsInterface(UnitEnum::class);
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

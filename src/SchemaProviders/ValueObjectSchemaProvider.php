@@ -19,13 +19,33 @@ class ValueObjectSchemaProvider implements SchemaProvider
     {
         return $class->implementsInterface(ValueObjectInterface::class);
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, true);
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
     ): Components {
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, false);
+    }
+
+    private function getSchema(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class,
+        bool $display
+    ): Components {
         $type = $class->getMethod('toNative')->getReturnType();
-        $schema = $componentBuilder->getSchemaForType($type);
+        $schema = $componentsBuilder->getSchemaForType($type, false, $display);
 
         if ($class->implementsInterface(HasRegexValueObjectInterface::class)) {
             $className = $class->name;

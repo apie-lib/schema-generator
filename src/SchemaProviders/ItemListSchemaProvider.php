@@ -13,6 +13,16 @@ class ItemListSchemaProvider implements SchemaProvider
     {
         return $class->isSubclassOf(ItemList::class) || $class->name === ItemList::class;
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

@@ -20,6 +20,34 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
         $method = $class->getMethod('getDiscriminatorMapping');
         return $method->getDeclaringClass()->name === $class->name && !$method->isAbstract();
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        $relations = [];
+        $method = $class->getMethod('getDiscriminatorMapping');
+        /** @var DiscriminatorMapping */
+        $discriminatorMapping = $method->invoke(null);
+        foreach ($discriminatorMapping->getConfigs() as $config) {
+            $key = $config->getDiscriminator();
+            $value = $componentsBuilder->addDisplaySchemaFor($config->getClassName(), $discriminatorMapping->getPropertyName());
+            $relations[$key] = $value;
+        }
+        $schema = new Schema([
+            'oneOf' => array_values($relations),
+            'discriminator' => new Discriminator([
+                'propertyName' => $discriminatorMapping->getPropertyName(),
+                'mapping' => $relations,
+            ]),
+        ]);
+
+        $componentsBuilder->setSchema($componentIdentifier, $schema);
+        return $componentsBuilder->getComponents();
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

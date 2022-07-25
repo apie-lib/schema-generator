@@ -8,6 +8,11 @@ use ReflectionClass;
 interface SchemaProvider
 {
     public function supports(ReflectionClass $class): bool;
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components;
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

@@ -14,6 +14,32 @@ class CompositeValueObjectSchemaProvider implements SchemaProvider
     {
         return in_array(CompositeValueObject::class, $class->getTraitNames());
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        $properties = [];
+        $required = [];
+        $className = $class->name;
+        foreach ($className::getFields() as $fieldName => $field) {
+            if (!$field->isOptional()) {
+                $required[] = $fieldName;
+            }
+            $properties[$fieldName] = $componentsBuilder->addDisplaySchemaFor($field->getTypehint());
+        }
+
+        $schema = new Schema([
+            'type' => 'object',
+            'properties' => $properties,
+            'required' => $required,
+        ]);
+        $componentsBuilder->setSchema($componentIdentifier, $schema);
+        return $componentsBuilder->getComponents();
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

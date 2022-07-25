@@ -15,6 +15,35 @@ class EntitySchemaProvider implements SchemaProvider
     {
         return $class->implementsInterface(EntityInterface::class);
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        $properties = [];
+        $required = [];
+        foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            if (preg_match('/^(get|is|has)([A-Z].*)$/', $method->name)) {
+                $returnType = $method->getReturnType();
+                $fieldName = lcfirst(substr($method->name, substr($method->name,0 , 1) === 'i' ? 2 : 3));
+                if ($returnType !== null && $returnType->getName() !== 'mixed' && !$returnType->allowsNull()) {
+                    $required[] = $fieldName;
+                }
+                $properties[$fieldName] = $componentsBuilder->getSchemaForType($returnType, false, true);
+            }
+        }
+
+        $schema = new Schema([
+            'type' => 'object',
+            'properties' => $properties,
+            'required' => $required,
+        ]);
+        $componentsBuilder->setSchema($componentIdentifier, $schema);
+        return $componentsBuilder->getComponents();
+    }
+
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,

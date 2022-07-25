@@ -18,17 +18,36 @@ class SchemaAttributeProvider implements SchemaProvider
     {
         return !empty($class->getAttributes(SchemaMethod::class));
     }
+
+    public function addDisplaySchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components
+    {
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::GET);
+    }
+    
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
     ): Components {
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::CREATE);
+    }
+
+    private function getSchema(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class,
+        SchemaUsages $usage
+    ) {
         foreach ($class->getAttributes(SchemaMethod::class) as $schemaMethod) {
             $method = $class->getMethod($schemaMethod->newInstance()->methodName);
             if (!$method->isStatic()) {
                 throw new MethodIsNotStaticException($method);
             }
-            $result = $method->invoke(null, SchemaUsages::CREATE);
+            $result = $method->invoke(null, $usage);
             if (is_array($result)) {
                 $result = new Schema($result);
             }
