@@ -19,8 +19,7 @@ class CompositeValueObjectSchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         $properties = [];
         $required = [];
         $className = $class->name;

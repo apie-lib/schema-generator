@@ -20,14 +20,13 @@ class EntitySchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         $properties = [];
         $required = [];
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if (preg_match('/^(get|is|has)([A-Z].*)$/', $method->name)) {
                 $returnType = $method->getReturnType();
-                $fieldName = lcfirst(substr($method->name, substr($method->name,0 , 1) === 'i' ? 2 : 3));
+                $fieldName = lcfirst(substr($method->name, substr($method->name, 0, 1) === 'i' ? 2 : 3));
                 if ($returnType !== null && $returnType->getName() !== 'mixed' && !$returnType->allowsNull()) {
                     $required[] = $fieldName;
                 }

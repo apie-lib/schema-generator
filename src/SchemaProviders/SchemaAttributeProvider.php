@@ -23,8 +23,7 @@ class SchemaAttributeProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::GET);
     }
     

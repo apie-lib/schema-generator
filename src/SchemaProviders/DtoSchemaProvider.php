@@ -21,8 +21,7 @@ class DtoSchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         $required = [];
         $properties = [];
         foreach ($class->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {

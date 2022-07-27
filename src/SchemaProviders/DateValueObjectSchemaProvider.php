@@ -21,8 +21,7 @@ class DateValueObjectSchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
     }
 

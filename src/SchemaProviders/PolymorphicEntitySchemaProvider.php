@@ -25,8 +25,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         $relations = [];
         $method = $class->getMethod('getDiscriminatorMapping');
         /** @var DiscriminatorMapping */
