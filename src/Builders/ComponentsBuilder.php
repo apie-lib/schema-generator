@@ -37,6 +37,9 @@ class ComponentsBuilder
 
     public function getComponents(): Components
     {
+        $schemas = $this->components->schemas;
+        ksort($schemas);
+        $this->components->schemas = $schemas;
         return $this->components;
     }
 
