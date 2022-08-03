@@ -9,6 +9,9 @@ use cebe\openapi\spec\Schema;
 use ReflectionClass;
 use ReflectionMethod;
 
+/**
+ * @implements SchemaProvider<EntityInterface>
+ */
 class EntitySchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
@@ -27,7 +30,7 @@ class EntitySchemaProvider implements SchemaProvider
             if (preg_match('/^(get|is|has)([A-Z].*)$/', $method->name)) {
                 $returnType = $method->getReturnType();
                 $fieldName = lcfirst(substr($method->name, substr($method->name, 0, 1) === 'i' ? 2 : 3));
-                if ($returnType !== null && $returnType->getName() !== 'mixed' && !$returnType->allowsNull()) {
+                if ($returnType !== null && ((string) $returnType) !== 'mixed' && !$returnType->allowsNull()) {
                     $required[] = $fieldName;
                 }
                 $properties[$fieldName] = $componentsBuilder->getSchemaForType($returnType, false, true);

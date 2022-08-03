@@ -13,6 +13,9 @@ use cebe\openapi\spec\Schema;
 use League\OpenAPIValidation\Schema\TypeFormats\FormatsContainer;
 use ReflectionClass;
 
+/**
+ * @implements SchemaProvider<StringValueObjectInterface>
+ */
 class StringValueObjectSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool

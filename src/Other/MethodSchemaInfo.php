@@ -1,10 +1,13 @@
 <?php
 namespace Apie\SchemaGenerator\Other;
 
+use cebe\openapi\spec\Reference;
+use cebe\openapi\spec\Schema;
+
 class MethodSchemaInfo
 {
     /**
-     * @var (Schema|Reference)[]
+     * @var array<int|string, Schema|Reference>
      */
     public array $schemas = [];
 

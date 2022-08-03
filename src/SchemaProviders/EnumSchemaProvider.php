@@ -8,6 +8,9 @@ use cebe\openapi\spec\Schema;
 use ReflectionClass;
 use UnitEnum;
 
+/**
+ * @implements SchemaProvider<UnitEnum>
+ */
 class EnumSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool

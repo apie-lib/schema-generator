@@ -18,10 +18,13 @@ use Apie\SchemaGenerator\SchemaProviders\ValueObjectSchemaProvider;
 class ComponentsBuilderFactory
 {
     /**
-     * @var SchemaProvider[]
+     * @var array<int, SchemaProvider<object>>
      */
     private array $schemaProviders;
 
+    /**
+     * @param SchemaProvider<object> $schemaProviders
+     */
     public function __construct(SchemaProvider... $schemaProviders)
     {
         $this->schemaProviders = $schemaProviders;

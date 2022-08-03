@@ -10,6 +10,9 @@ use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
+/**
+ * @implements SchemaProvider<TimeRelatedValueObjectInterface>
+ */
 class DateValueObjectSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool

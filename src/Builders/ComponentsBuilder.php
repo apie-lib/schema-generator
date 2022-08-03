@@ -10,19 +10,24 @@ use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
+use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
+use ReflectionType;
 use ReflectionUnionType;
 
 class ComponentsBuilder
 {
     /**
-     * @var SchemaProvider[]
+     * @var array<int, SchemaProvider<object>>
      */
     private array $schemaProviders;
 
     private Components $components;
 
+    /**
+     * @param SchemaProvider<object> $schemaProviders
+     */
     public function __construct(SchemaProvider... $schemaProviders)
     {
         $this->schemaProviders = $schemaProviders;
@@ -68,14 +73,22 @@ class ComponentsBuilder
         return $returnValue;
     }
 
-    public function getSchemaForType(ReflectionNamedType|ReflectionUnionType|null $type, bool $array = false, bool $display = false): Schema|Reference
+    public function getSchemaForType(ReflectionType|null $type, bool $array = false, bool $display = false): Schema|Reference
     {
         $methodName = $display ? 'addDisplaySchemaFor' : 'addCreationSchemaFor';
         $result = $this->getMixedReference();
-        if ($type instanceof ReflectionUnionType) {
+        if ($type instanceof ReflectionIntersectionType) {
+            $allOfs = [];
+            foreach ($type->getTypes() as $allOfType) {
+                $allOfs[] = $this->$methodName((string) $allOfType);
+            }
+            $result = new Schema([
+                'allOf' => $allOfs,
+            ]);
+        } elseif ($type instanceof ReflectionUnionType) {
             $oneOfs = [];
             foreach ($type->getTypes() as $oneOfType) {
-                $oneOfs[] = $this->$methodName($oneOfType->getName());
+                $oneOfs[] = $this->$methodName((string) $oneOfType);
             }
             $result = new Schema([
                 'oneOf' => $oneOfs,

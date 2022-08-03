@@ -12,6 +12,9 @@ use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
+/**
+ * @implements SchemaProvider<object>
+ */
 class SchemaAttributeProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
@@ -35,12 +38,15 @@ class SchemaAttributeProvider implements SchemaProvider
         return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::CREATE);
     }
 
+    /**
+     * @param ReflectionClass<object> $class
+     */
     private function getSchema(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class,
         SchemaUsages $usage
-    ) {
+    ): Components {
         foreach ($class->getAttributes(SchemaMethod::class) as $schemaMethod) {
             $method = $class->getMethod($schemaMethod->newInstance()->methodName);
             if (!$method->isStatic()) {

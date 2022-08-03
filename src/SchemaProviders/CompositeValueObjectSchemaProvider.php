@@ -2,17 +2,22 @@
 namespace Apie\SchemaGenerator\SchemaProviders;
 
 use Apie\CompositeValueObjects\CompositeValueObject;
+use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
+/**
+ * @implements SchemaProvider<ValueObjectInterface>
+ */
 class CompositeValueObjectSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return in_array(CompositeValueObject::class, $class->getTraitNames());
+        return in_array(CompositeValueObject::class, $class->getTraitNames())
+            && $class->implementsInterface(ValueObjectInterface::class);
     }
 
     public function addDisplaySchemaFor(

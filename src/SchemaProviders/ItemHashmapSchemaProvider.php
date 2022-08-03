@@ -8,6 +8,9 @@ use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
+/**
+ * @implements SchemaProvider<ItemHashmap>
+ */
 class ItemHashmapSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool

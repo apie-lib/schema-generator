@@ -7,6 +7,9 @@ use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use ReflectionClass;
 
+/**
+ * @implements SchemaProvider<ItemList>
+ */
 class ItemListSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool

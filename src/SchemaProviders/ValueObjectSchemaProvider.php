@@ -12,6 +12,7 @@ use ReflectionClass;
 
 /**
  * Gets schema data from the toNative() return type hint.
+ * @implements SchemaProvider<ValueObjectInterface>
  */
 class ValueObjectSchemaProvider implements SchemaProvider
 {
@@ -26,7 +27,6 @@ class ValueObjectSchemaProvider implements SchemaProvider
         ReflectionClass $class
     ): Components {
         return $this->getSchema($componentsBuilder, $componentIdentifier, $class, true);
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
     }
 
     public function addCreationSchemaFor(
@@ -37,6 +37,9 @@ class ValueObjectSchemaProvider implements SchemaProvider
         return $this->getSchema($componentsBuilder, $componentIdentifier, $class, false);
     }
 
+    /**
+     * @param ReflectionClass<ValueObjectInterface> $class
+     */
     private function getSchema(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
