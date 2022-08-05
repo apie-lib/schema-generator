@@ -32,11 +32,13 @@ class ComponentsBuilder
     {
         $this->schemaProviders = $schemaProviders;
         $this->components = new Components([]);
-        $this->setSchema('mixed', new Schema(['nullable' => true]));
     }
 
     public function getMixedReference(): Reference
     {
+        if (!isset($this->components->schemas['mixed'])) {
+            $this->setSchema('mixed', new Schema(['nullable' => true]));
+        }
         return new Reference(['$ref' => '#/components/schemas/mixed']);
     }
 
