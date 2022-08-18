@@ -121,6 +121,8 @@ class ComponentsBuilder
             case'float':
             case 'double':
                 return new Schema(['type' => 'number']);
+            case 'void':
+                return new Schema(['nullable' => true, 'default' => null]);
         }
         $refl = new ReflectionClass($class);
         $identifier = Utils::getDisplayNameForValueObject($refl) . '-get';
