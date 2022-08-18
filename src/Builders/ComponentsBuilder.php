@@ -113,8 +113,9 @@ class ComponentsBuilder
             case 'mixed':
                 return $this->getMixedReference();
             case 'string':
-            case 'bool':
                 return new Schema(['type' => $class]);
+            case 'bool':
+                return new Schema(['type' => 'boolean']);
             case 'int':
                 return new Schema(['type' => 'integer']);
             case'float':
@@ -141,8 +142,9 @@ class ComponentsBuilder
             case 'mixed':
                 return $this->getMixedReference();
             case 'string':
-            case 'bool':
                 return new Schema(['type' => $class]);
+            case 'bool':
+                return new Schema(['type' => 'boolean']);
             case 'int':
                 return new Schema(['type' => 'integer']);
             case'float':
