@@ -13,7 +13,7 @@ use Throwable;
  */
 class ThrowableSchemaProvider implements SchemaProvider
 {
-    public function __construct(private $debug = false)
+    public function __construct(private bool $debug = false)
     {
     }
 
