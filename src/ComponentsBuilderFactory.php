@@ -4,6 +4,7 @@ namespace Apie\SchemaGenerator;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\CompositeValueObjectSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\DateTimeSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateValueObjectSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DtoSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\EntitySchemaProvider;
@@ -42,6 +43,7 @@ class ComponentsBuilderFactory
             new DtoSchemaProvider(),
             new EntitySchemaProvider(),
             new CompositeValueObjectSchemaProvider(),
+            new DateTimeSchemaProvider(),
             new DateValueObjectSchemaProvider(),
             new StringValueObjectSchemaProvider(),
             new ValueObjectSchemaProvider(),
