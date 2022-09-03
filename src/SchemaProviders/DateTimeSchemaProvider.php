@@ -11,7 +11,7 @@ use DateTimeInterface;
 use ReflectionClass;
 
 /**
- * @implements SchemaProvider<TimeRelatedValueObjectInterface>
+ * @implements SchemaProvider<DateTimeInterface>
  */
 class DateTimeSchemaProvider implements SchemaProvider
 {
