@@ -192,6 +192,7 @@ class ComponentsBuilderFactoryTest extends TestCase
 
         yield 'Polymorphic relation' => [
             new Schema([
+                'type' => 'object',
                 'oneOf' => [
                     new Reference(['$ref' => '#/components/schemas/Cow-post']),
                     new Reference(['$ref' => '#/components/schemas/Elephant-post']),
