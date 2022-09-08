@@ -39,6 +39,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             $relations[$key] = $value;
         }
         $schema = new Schema([
+            'type' => 'object',
             'oneOf' => array_values($relations),
             'discriminator' => new Discriminator([
                 'propertyName' => $discriminatorMapping->getPropertyName(),
@@ -65,6 +66,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             $relations[$key] = $value;
         }
         $schema = new Schema([
+            'type' => 'object',
             'oneOf' => array_values($relations),
             'discriminator' => new Discriminator([
                 'propertyName' => $discriminatorMapping->getPropertyName(),

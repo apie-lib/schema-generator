@@ -27,7 +27,7 @@ class EntitySchemaProvider implements SchemaProvider
         $properties = [];
         $required = [];
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if (preg_match('/^(get|is|has)([A-Z].*)$/', $method->name)) {
+            if (!$method->isStatic() && preg_match('/^(get|is|has)([A-Z].*)$/', $method->name)) {
                 $returnType = $method->getReturnType();
                 $fieldName = lcfirst(substr($method->name, substr($method->name, 0, 1) === 'i' ? 2 : 3));
                 if ($returnType !== null && ((string) $returnType) !== 'mixed' && !$returnType->allowsNull()) {
@@ -60,7 +60,7 @@ class EntitySchemaProvider implements SchemaProvider
             $properties = $info->schemas;
         }
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if (preg_match('/^(set)([A-Z].*)$/', $method->name)) {
+            if (!$method->isStatic() && preg_match('/^(set)([A-Z].*)$/', $method->name)) {
                 $info = $componentsBuilder->getSchemaForMethod($method);
                 $lastItem = array_pop($info->schemas);
                 $properties[lcfirst(substr($method->name, 3))] = $lastItem ? : $componentsBuilder->getMixedReference();
