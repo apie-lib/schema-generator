@@ -11,6 +11,7 @@ use Apie\SchemaGenerator\SchemaProviders\EntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\EnumSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemHashmapSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemListSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\MetadataSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
@@ -40,14 +41,15 @@ class ComponentsBuilderFactory
             new ItemListSchemaProvider(),
             new ItemHashmapSchemaProvider(),
             new PolymorphicEntitySchemaProvider(),
-            new DtoSchemaProvider(),
-            new EntitySchemaProvider(),
-            new CompositeValueObjectSchemaProvider(),
+            //new DtoSchemaProvider(),
+            //new EntitySchemaProvider(),
+            //new CompositeValueObjectSchemaProvider(),
             new DateTimeSchemaProvider(),
             new DateValueObjectSchemaProvider(),
             new StringValueObjectSchemaProvider(),
             new ValueObjectSchemaProvider(),
-            new EnumSchemaProvider()
+            //new EnumSchemaProvider(),
+            new MetadataSchemaProvider(),
         );
     }
 

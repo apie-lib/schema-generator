@@ -13,6 +13,8 @@ use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
 /**
+ * Reads #SchemaMethod attributes on classes.
+ * 
  * @implements SchemaProvider<object>
  */
 class SchemaAttributeProvider implements SchemaProvider

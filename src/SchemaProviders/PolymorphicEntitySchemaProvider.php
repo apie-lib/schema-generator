@@ -7,6 +7,7 @@ use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Discriminator;
+use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
@@ -36,7 +37,8 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
         foreach ($discriminatorMapping->getConfigs() as $config) {
             $key = $config->getDiscriminator();
             $value = $componentsBuilder->addDisplaySchemaFor($config->getClassName(), $discriminatorMapping->getPropertyName());
-            $relations[$key] = $value;
+            assert($value instanceof Reference);
+            $relations[$key] = $value->getReference();
         }
         $schema = new Schema([
             'type' => 'object',

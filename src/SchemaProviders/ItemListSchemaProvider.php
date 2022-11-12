@@ -8,6 +8,8 @@ use cebe\openapi\spec\Components;
 use ReflectionClass;
 
 /**
+ * Creates schemas for Item Lists.
+ * 
  * @implements SchemaProvider<ItemList>
  */
 class ItemListSchemaProvider implements SchemaProvider

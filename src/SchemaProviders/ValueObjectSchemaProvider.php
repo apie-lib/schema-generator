@@ -1,6 +1,7 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
+use Apie\CompositeValueObjects\CompositeValueObject;
 use Apie\Core\RegexUtils;
 use Apie\Core\ValueObjects\Interfaces\HasRegexValueObjectInterface;
 use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
@@ -18,7 +19,7 @@ class ValueObjectSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return $class->implementsInterface(ValueObjectInterface::class);
+        return $class->implementsInterface(ValueObjectInterface::class) && !in_array(CompositeValueObject::class, $class->getTraitNames());
     }
 
     public function addDisplaySchemaFor(

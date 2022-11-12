@@ -216,8 +216,10 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'type' => 'object',
                 'properties' => [
                     'id' => new Reference(['$ref' => '#/components/schemas/AnimalIdentifier-post']),
+                    'animalType' => new Schema(['type' => 'string', 'nullable' => false]),
+                    'hasMilk' => new Schema(['type' => 'boolean', 'nullable' => false]),
                 ],
-                'required' => [],
+                'required' => ['animalType'],
             ]),
             'Cow-post',
             Cow::class,
