@@ -41,14 +41,10 @@ class ComponentsBuilderFactory
             new ItemListSchemaProvider(),
             new ItemHashmapSchemaProvider(),
             new PolymorphicEntitySchemaProvider(),
-            //new DtoSchemaProvider(),
-            //new EntitySchemaProvider(),
-            //new CompositeValueObjectSchemaProvider(),
             new DateTimeSchemaProvider(),
             new DateValueObjectSchemaProvider(),
             new StringValueObjectSchemaProvider(),
             new ValueObjectSchemaProvider(),
-            //new EnumSchemaProvider(),
             new MetadataSchemaProvider(),
         );
     }
