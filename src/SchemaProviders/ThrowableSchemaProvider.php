@@ -10,7 +10,7 @@ use Throwable;
 
 /**
  * Creates schemas for exceptions.
- * 
+ *
  * @implements SchemaProvider<Throwable>
  */
 class ThrowableSchemaProvider implements SchemaProvider

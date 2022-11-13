@@ -8,7 +8,6 @@ use Apie\Core\Metadata\MetadataFactory;
 use Apie\Core\Metadata\MetadataInterface;
 use Apie\Core\Metadata\ScalarMetadata;
 use Apie\Core\Metadata\UnionTypeMetadata;
-use Apie\Core\Metadata\ValueObjectMetadata;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
@@ -45,7 +44,7 @@ class MetadataSchemaProvider implements SchemaProvider
 
     private function createFromScalar(ComponentsBuilder $componentsBuilder, ScalarMetadata $metadata, bool $display): Schema
     {
-        return match($metadata->toScalarType()) {
+        return match ($metadata->toScalarType()) {
             ScalarType::NULL => new Schema(['nullable' => true]),
             ScalarType::ARRAY => new Schema(['type' => 'array', 'items' => $componentsBuilder->getMixedReference()]),
             ScalarType::STDCLASS => new Schema(['type' => 'object', 'additionalProperties' => $componentsBuilder->getMixedReference()]),
@@ -91,8 +90,7 @@ class MetadataSchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         $componentsBuilder->setSchema(
             $componentIdentifier,
             $this->createSchemaForMetadata(
@@ -108,8 +106,7 @@ class MetadataSchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class
-    ): Components
-    {
+    ): Components {
         $componentsBuilder->setSchema(
             $componentIdentifier,
             $this->createSchemaForMetadata(
