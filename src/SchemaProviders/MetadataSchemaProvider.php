@@ -9,6 +9,7 @@ use Apie\Core\Metadata\MetadataInterface;
 use Apie\Core\Metadata\ScalarMetadata;
 use Apie\Core\Metadata\UnionTypeMetadata;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
+use Apie\SchemaGenerator\Interfaces\ModifySchemaProvider;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Reference;
@@ -18,7 +19,7 @@ use ReflectionClass;
 /**
  * @implements SchemaProvider<object|string|int|float|bool|null>
  */
-class MetadataSchemaProvider implements SchemaProvider
+class MetadataSchemaProvider implements ModifySchemaProvider
 {
     private array $mapping = [
         EnumMetadata::class => 'createFromEnum',
@@ -112,6 +113,22 @@ class MetadataSchemaProvider implements SchemaProvider
             $this->createSchemaForMetadata(
                 $componentsBuilder,
                 MetadataFactory::getCreationMetadata($class, new ApieContext()),
+                false
+            )
+        );
+        return $componentsBuilder->getComponents();
+    }
+
+    public function addModificationSchemaFor(
+        ComponentsBuilder $componentsBuilder,
+        string $componentIdentifier,
+        ReflectionClass $class
+    ): Components {
+        $componentsBuilder->setSchema(
+            $componentIdentifier,
+            $this->createSchemaForMetadata(
+                $componentsBuilder,
+                MetadataFactory::getModificationMetadata($class, new ApieContext()),
                 false
             )
         );

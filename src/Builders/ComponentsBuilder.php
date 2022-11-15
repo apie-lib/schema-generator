@@ -4,6 +4,7 @@ namespace Apie\SchemaGenerator\Builders;
 use Apie\Core\Exceptions\DuplicateIdentifierException;
 use Apie\Core\ValueObjects\Utils;
 use Apie\SchemaGenerator\Exceptions\ICanNotExtractASchemaFromClassException;
+use Apie\SchemaGenerator\Interfaces\ModifySchemaProvider;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use Apie\SchemaGenerator\Other\MethodSchemaInfo;
 use cebe\openapi\spec\Components;
@@ -164,6 +165,22 @@ class ComponentsBuilder
         foreach ($this->schemaProviders as $schemaProvider) {
             if ($schemaProvider->supports($refl)) {
                 $this->components = $schemaProvider->addCreationSchemaFor($this, $identifier, $refl);
+                return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
+            }
+        }
+        throw new ICanNotExtractASchemaFromClassException($refl->name);
+    }
+
+    public function addModificationSchemaFor(string $class, ?string $discriminatorColumn = null): Reference|Schema
+    {
+        $refl = new ReflectionClass($class);
+        $identifier = Utils::getDisplayNameForValueObject($refl) . '-patch';
+        if (isset($this->components->schemas[$identifier])) {
+            return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
+        }
+        foreach ($this->schemaProviders as $schemaProvider) {
+            if ($schemaProvider instanceof ModifySchemaProvider && $schemaProvider->supports($refl)) {
+                $this->components = $schemaProvider->addModificationSchemaFor($this, $identifier, $refl);
                 return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
             }
         }
