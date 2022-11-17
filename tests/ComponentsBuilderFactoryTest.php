@@ -88,7 +88,6 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'type' => 'object',
                 'properties' => [
                 ],
-                'required' => [],
             ]),
             'EmptyDto-post',
             EmptyDto::class,
@@ -96,7 +95,6 @@ class ComponentsBuilderFactoryTest extends TestCase
         yield 'DTO with optional fields' => [
             new Schema([
                 'type' => 'object',
-                'required' => [],
                 'properties' => [
                     'string' => new Schema(['type' => 'string', 'nullable' => false]),
                     'integer' => new Schema(['type' => 'integer', 'nullable' => false]),
@@ -159,8 +157,6 @@ class ComponentsBuilderFactoryTest extends TestCase
         yield 'DTO with nullable, optional fields' => [
             new Schema([
                 'type' => 'object',
-                'required' => [
-                ],
                 'properties' => [
                     'optionalString' => new Schema(['type' => 'string', 'nullable' => true]),
                     'optionalInteger' => new Schema(['type' => 'integer', 'nullable' => true]),

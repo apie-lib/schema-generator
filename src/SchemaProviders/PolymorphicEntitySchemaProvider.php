@@ -38,7 +38,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             $key = $config->getDiscriminator();
             $value = $componentsBuilder->addDisplaySchemaFor($config->getClassName(), $discriminatorMapping->getPropertyName());
             assert($value instanceof Reference);
-            $relations[$key] = $value->getReference();
+            $relations[$key] = $value;
         }
         $schema = new Schema([
             'type' => 'object',
@@ -65,6 +65,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
         foreach ($discriminatorMapping->getConfigs() as $config) {
             $key = $config->getDiscriminator();
             $value = $componentsBuilder->addCreationSchemaFor($config->getClassName(), $discriminatorMapping->getPropertyName());
+            assert($value instanceof Reference);
             $relations[$key] = $value;
         }
         $schema = new Schema([

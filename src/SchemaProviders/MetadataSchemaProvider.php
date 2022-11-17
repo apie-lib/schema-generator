@@ -82,7 +82,10 @@ class MetadataSchemaProvider implements ModifySchemaProvider
                 $properties[$fieldName]->nullable = $field->allowsNull();
             }
         }
-        $schema->required = $metadata->getRequiredFields()->toArray();
+        $required = $metadata->getRequiredFields()->toArray();
+        if (!empty($required)) {
+            $schema->required = $required;
+        }
         $schema->properties = $properties;
         return $schema;
     }
