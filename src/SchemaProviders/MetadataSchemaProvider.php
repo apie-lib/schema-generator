@@ -17,10 +17,13 @@ use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
 /**
- * @implements SchemaProvider<object|string|int|float|bool|null>
+ * @implements ModifySchemaProvider<object>
  */
 class MetadataSchemaProvider implements ModifySchemaProvider
 {
+    /**
+     * @var array<class-string<MetadataInterface>, string> $mapping
+     */
     private array $mapping = [
         EnumMetadata::class => 'createFromEnum',
         ScalarMetadata::class => 'createFromScalar',
