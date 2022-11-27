@@ -10,7 +10,6 @@ use Apie\Core\Metadata\ScalarMetadata;
 use Apie\Core\Metadata\UnionTypeMetadata;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\ModifySchemaProvider;
-use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
