@@ -11,7 +11,6 @@ use Apie\SchemaGenerator\SchemaProviders\MetadataSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
-use Apie\SchemaGenerator\SchemaProviders\ThrowableSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ValueObjectSchemaProvider;
 
 class ComponentsBuilderFactory
@@ -29,11 +28,10 @@ class ComponentsBuilderFactory
         $this->schemaProviders = $schemaProviders;
     }
 
-    public static function createComponentsBuilderFactory(bool $debug = false): self
+    public static function createComponentsBuilderFactory(): self
     {
         return new self(
             new SchemaAttributeProvider(),
-            new ThrowableSchemaProvider($debug),
             new ItemListSchemaProvider(),
             new ItemHashmapSchemaProvider(),
             new PolymorphicEntitySchemaProvider(),
