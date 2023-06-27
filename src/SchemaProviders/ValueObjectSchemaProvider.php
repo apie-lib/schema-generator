@@ -8,7 +8,6 @@ use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
-use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
 /**
