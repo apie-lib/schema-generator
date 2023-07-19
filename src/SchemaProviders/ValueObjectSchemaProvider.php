@@ -1,8 +1,8 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
-use Apie\CompositeValueObjects\CompositeValueObject;
 use Apie\Core\RegexUtils;
+use Apie\Core\ValueObjects\CompositeValueObject;
 use Apie\Core\ValueObjects\Interfaces\HasRegexValueObjectInterface;
 use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
