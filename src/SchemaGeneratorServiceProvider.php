@@ -19,7 +19,6 @@ class SchemaGeneratorServiceProvider extends ServiceProvider
             function ($app) {
                 return call_user_func(
                     'Apie\\SchemaGenerator\\ComponentsBuilderFactory::createComponentsBuilderFactory'
-                
                 );
                 
             }
