@@ -16,6 +16,8 @@ use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
 /**
+ * Get OpenAPI schema from the apie/core MetadataFactory class.
+ *
  * @implements ModifySchemaProvider<object>
  */
 class MetadataSchemaProvider implements ModifySchemaProvider
@@ -38,7 +40,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
     {
         $oneOfs = [];
         foreach ($metadata->getTypes() as $type) {
-            $oneOfs[] = $this->createSchemaForMetadata($componentsBuilder, $metadata, $display);
+            $oneOfs[] = $this->createSchemaForMetadata($componentsBuilder, $metadata, $display, false);
         }
         return new Schema([
             'oneOf' => $oneOfs,
@@ -65,7 +67,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
         ]);
     }
 
-    private function createSchemaForMetadata(ComponentsBuilder $componentsBuilder, MetadataInterface $metadata, bool $display): Schema|Reference
+    private function createSchemaForMetadata(ComponentsBuilder $componentsBuilder, MetadataInterface $metadata, bool $display, bool $nullable): Schema|Reference
     {
         $className = get_class($metadata);
         if (isset($this->mapping[$className])) {
@@ -88,6 +90,9 @@ class MetadataSchemaProvider implements ModifySchemaProvider
         if (!empty($required)) {
             $schema->required = $required;
         }
+        if ($nullable) {
+            $schema->nullable = true;
+        }
         $schema->properties = $properties;
         return $schema;
     }
@@ -95,14 +100,16 @@ class MetadataSchemaProvider implements ModifySchemaProvider
     public function addDisplaySchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
         $componentsBuilder->setSchema(
             $componentIdentifier,
             $this->createSchemaForMetadata(
                 $componentsBuilder,
                 MetadataFactory::getResultMetadata($class, new ApieContext()),
-                true
+                true,
+                $nullable
             )
         );
         return $componentsBuilder->getComponents();
@@ -111,14 +118,16 @@ class MetadataSchemaProvider implements ModifySchemaProvider
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
         $componentsBuilder->setSchema(
             $componentIdentifier,
             $this->createSchemaForMetadata(
                 $componentsBuilder,
                 MetadataFactory::getCreationMetadata($class, new ApieContext()),
-                false
+                false,
+                $nullable
             )
         );
         return $componentsBuilder->getComponents();
@@ -134,6 +143,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
             $this->createSchemaForMetadata(
                 $componentsBuilder,
                 MetadataFactory::getModificationMetadata($class, new ApieContext()),
+                false,
                 false
             )
         );

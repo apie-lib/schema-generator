@@ -148,7 +148,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                     'nullableInteger' => new Schema(['type' => 'integer', 'nullable' => true]),
                     'nullableFloatingPoint' => new Schema(['type' => 'number', 'nullable' => true]),
                     'nullableTrueOrFalse' => new Schema(['type' => 'boolean', 'nullable' => true]),
-                    'nullableGender' => new Reference(['$ref' => '#/components/schemas/Gender-post']),
+                    'nullableGender' => new Reference(['$ref' => '#/components/schemas/Gender-nullable-post']),
                 ],
             ]),
             'NullableExampleDto-post',
@@ -164,7 +164,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                     'optionalTrueOrFalse' => new Schema(['type' => 'boolean', 'nullable' => true]),
                     'mixed' => new Reference(['$ref' => '#/components/schemas/mixed']),
                     'noType' => new Reference(['$ref' => '#/components/schemas/mixed']),
-                    'optionalGender' => new Reference(['$ref' => '#/components/schemas/Gender-post']),
+                    'optionalGender' => new Reference(['$ref' => '#/components/schemas/Gender-nullable-post']),
                 ],
             ]),
             'OptionalExampleDto-post',
@@ -179,7 +179,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'properties' => [
                     'address' => new Reference(['$ref' => '#/components/schemas/AddressWithZipcodeCheck-post']),
                     'password' => new Reference(['$ref' => '#/components/schemas/Password-post']),
-                    'id' => new Reference(['$ref' => '#/components/schemas/UserWithAddressIdentifier-post']),
+                    'id' => new Reference(['$ref' => '#/components/schemas/UserWithAddressIdentifier-nullable-post']),
                 ],
             ]),
             'UserWithAddress-post',
@@ -211,7 +211,7 @@ class ComponentsBuilderFactoryTest extends TestCase
             new Schema([
                 'type' => 'object',
                 'properties' => [
-                    'id' => new Reference(['$ref' => '#/components/schemas/AnimalIdentifier-post']),
+                    'id' => new Reference(['$ref' => '#/components/schemas/AnimalIdentifier-nullable-post']),
                     'animalType' => new Schema(['type' => 'string', 'nullable' => false]),
                     'hasMilk' => new Schema(['type' => 'boolean', 'nullable' => false]),
                 ],

@@ -22,18 +22,20 @@ class ItemListSchemaProvider implements SchemaProvider
     public function addDisplaySchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
     }
 
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
         $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, true);
+        $schema = $componentsBuilder->getSchemaForType($type, true, nullable: $nullable);
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();

@@ -21,22 +21,27 @@ class ItemHashmapSchemaProvider implements SchemaProvider
     public function addDisplaySchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
     }
 
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
         $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type);
+        $schema = $componentsBuilder->getSchemaForType($type, $nullable);
         $schema = new Schema([
             'type' => 'object',
             'additionalProperties' => $schema
         ]);
+        if ($nullable) {
+            $schema->nullable = true;
+        }
 
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 

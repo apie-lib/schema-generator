@@ -27,17 +27,19 @@ class SchemaAttributeProvider implements SchemaProvider
     public function addDisplaySchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::GET);
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::GET, $nullable);
     }
     
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::CREATE);
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, SchemaUsages::CREATE, $nullable);
     }
 
     /**
@@ -47,7 +49,8 @@ class SchemaAttributeProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class,
-        SchemaUsages $usage
+        SchemaUsages $usage,
+        bool $nullable
     ): Components {
         foreach ($class->getAttributes(SchemaMethod::class) as $schemaMethod) {
             $method = $class->getMethod($schemaMethod->newInstance()->methodName);
@@ -63,6 +66,9 @@ class SchemaAttributeProvider implements SchemaProvider
             }
             if (!$result instanceof Schema || !$result->validate()) {
                 throw new InvalidTypeException($result, Schema::class);
+            }
+            if ($nullable) {
+                $result->nullable = true;
             }
             $componentsBuilder->setSchema($componentIdentifier, $result);
 
