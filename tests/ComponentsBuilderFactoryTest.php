@@ -197,9 +197,9 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'discriminator' => new Discriminator([
                     'propertyName' => 'animalType',
                     'mapping' => [
-                        'cow' => new Reference(['$ref' => '#/components/schemas/Cow-post']),
-                        'elephant' => new Reference(['$ref' => '#/components/schemas/Elephant-post']),
-                        'fish' => new Reference(['$ref' => '#/components/schemas/Fish-post']),
+                        'cow' => '#/components/schemas/Cow-post',
+                        'elephant' => '#/components/schemas/Elephant-post',
+                        'fish' => '#/components/schemas/Fish-post',
                     ]
                 ])
             ]),

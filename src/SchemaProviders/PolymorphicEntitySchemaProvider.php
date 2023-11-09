@@ -62,7 +62,12 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             'oneOf' => array_values($relations),
             'discriminator' => new Discriminator([
                 'propertyName' => $discriminatorMapping->getPropertyName(),
-                'mapping' => $relations,
+                'mapping' => array_map(
+                    function (Reference $ref) {
+                        return $ref->getReference();
+                    },
+                    $relations
+                ),
             ]),
         ]);
         if ($nullable) {
@@ -98,7 +103,12 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             'oneOf' => array_values($relations),
             'discriminator' => new Discriminator([
                 'propertyName' => $discriminatorMapping->getPropertyName(),
-                'mapping' => $relations,
+                'mapping' => array_map(
+                    function (Reference $ref) {
+                        return $ref->getReference();
+                    },
+                    $relations
+                ),
             ]),
         ]);
         if ($nullable) {
