@@ -162,6 +162,8 @@ class ComponentsBuilder
         switch ($class) {
             case 'mixed':
                 return $this->getMixedReference();
+            case 'object':
+                return new Schema(['type' => 'object', 'additionalProperties' => true] + $map);
             case 'string':
                 return new Schema(['type' => $class] + $map);
             case 'bool':
