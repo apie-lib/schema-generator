@@ -1,6 +1,7 @@
 <?php
 namespace Apie\SchemaGenerator\Builders;
 
+use Apie\Core\Attributes\Context;
 use Apie\Core\Exceptions\DuplicateIdentifierException;
 use Apie\Core\ValueObjects\Utils;
 use Apie\SchemaGenerator\Exceptions\ICanNotExtractASchemaFromClassException;
@@ -81,6 +82,9 @@ class ComponentsBuilder
     {
         $returnValue = new MethodSchemaInfo();
         foreach ($method->getParameters() as $parameter) {
+            if (count($parameter->getAttributes(Context::class)) > 0) {
+                continue;
+            }
             if (!$parameter->isDefaultValueAvailable() && !$parameter->allowsNull()) {
                 $returnValue->required[] = $parameter->name;
             }
