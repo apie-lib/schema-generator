@@ -135,6 +135,8 @@ class ComponentsBuilder
                 return $this->getMixedReference();
             case 'string':
                 return new Schema(['type' => $class] + $map);
+            case 'array':
+                return new Schema(['type' => 'object', 'additionalProperties' => $this->getMixedReference()] + $map);
             case 'bool':
                 return new Schema(['type' => 'boolean'] + $map);
             case 'int':
@@ -170,6 +172,8 @@ class ComponentsBuilder
                 return new Schema(['type' => 'object', 'additionalProperties' => true] + $map);
             case 'string':
                 return new Schema(['type' => $class] + $map);
+            case 'array':
+                return new Schema(['type' => 'object', 'additionalProperties' => $this->getMixedReference()] + $map);    
             case 'bool':
                 return new Schema(['type' => 'boolean'] + $map);
             case 'int':
