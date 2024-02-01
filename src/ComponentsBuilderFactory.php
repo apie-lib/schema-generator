@@ -4,6 +4,7 @@ namespace Apie\SchemaGenerator;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateTimeSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\DateTimeZoneSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateValueObjectSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemHashmapSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemListSchemaProvider;
@@ -36,6 +37,7 @@ class ComponentsBuilderFactory
             new ItemHashmapSchemaProvider(),
             new PolymorphicEntitySchemaProvider(),
             new DateTimeSchemaProvider(),
+            new DateTimeZoneSchemaProvider(),
             new DateValueObjectSchemaProvider(),
             new StringValueObjectSchemaProvider(),
             new ValueObjectSchemaProvider(),
