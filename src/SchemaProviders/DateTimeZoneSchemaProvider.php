@@ -1,13 +1,10 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
-use Apie\Core\RegexUtils;
-use Apie\DateformatToRegex\DateFormatToRegex;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
-use DateTimeInterface;
 use DateTimeZone;
 use ReflectionClass;
 
