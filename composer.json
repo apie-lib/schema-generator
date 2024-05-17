@@ -29,7 +29,9 @@
     "apie/common-value-objects": "self.version",
     "apie/date-value-objects": "self.version",
     "apie/fixtures": "self.version",
+    "apie/service-provider-generator": "0.11.2",
     "apie/text-value-objects": "self.version",
+    "illuminate/support": "*",
     "phpunit/phpunit": "^9.5",
     "phpspec/prophecy-phpunit": "^2.0"
   },
