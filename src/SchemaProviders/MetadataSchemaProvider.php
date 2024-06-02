@@ -50,7 +50,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
     private function createFromScalar(ComponentsBuilder $componentsBuilder, ScalarMetadata $metadata, bool $display): Schema
     {
         return match ($metadata->toScalarType()) {
-            ScalarType::NULL => new Schema(['nullable' => true]),
+            ScalarType::NULLVALUE => new Schema(['nullable' => true]),
             ScalarType::ARRAY => new Schema(['type' => 'array', 'items' => $componentsBuilder->getMixedReference()]),
             ScalarType::STDCLASS => new Schema(['type' => 'object', 'additionalProperties' => $componentsBuilder->getMixedReference()]),
             default => new Schema([

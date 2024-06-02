@@ -33,7 +33,6 @@ class DateTimeZoneSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        
         $schema = new Schema([
             'type' => 'string',
             'format' => 'datetimezone',
