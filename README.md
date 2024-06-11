@@ -6,7 +6,7 @@
 
 
 
- [![Latest Stable Version](http://poser.pugx.org/apie/schema-generator/v)](https://packagist.org/packages/apie/schema-generator) [![Total Downloads](http://poser.pugx.org/apie/schema-generator/downloads)](https://packagist.org/packages/apie/schema-generator) [![Latest Unstable Version](http://poser.pugx.org/apie/schema-generator/v/unstable)](https://packagist.org/packages/apie/schema-generator) [![License](http://poser.pugx.org/apie/schema-generator/license)](https://packagist.org/packages/apie/schema-generator) [![PHP Version Require](http://poser.pugx.org/apie/schema-generator/require/php)](https://packagist.org/packages/apie/schema-generator) [![PHP Composer](https://apie-lib.github.io/projectCoverage/coverage-schema-generator.svg)](https://apie-lib.github.io/projectCoverage/app/packages/schema-generator/index.html)  
+ [![Latest Stable Version](http://poser.pugx.org/apie/schema-generator/v)](https://packagist.org/packages/apie/schema-generator) [![Total Downloads](http://poser.pugx.org/apie/schema-generator/downloads)](https://packagist.org/packages/apie/schema-generator) [![Latest Unstable Version](http://poser.pugx.org/apie/schema-generator/v/unstable)](https://packagist.org/packages/apie/schema-generator) [![License](http://poser.pugx.org/apie/schema-generator/license)](https://packagist.org/packages/apie/schema-generator) [![PHP Composer](https://apie-lib.github.io/projectCoverage/coverage-schema-generator.svg)](https://apie-lib.github.io/projectCoverage/app/packages/schema-generator/index.html)  
 
 [![PHP Composer](https://github.com/apie-lib/schema-generator/actions/workflows/php.yml/badge.svg?event=push)](https://github.com/apie-lib/schema-generator/actions/workflows/php.yml)
 
