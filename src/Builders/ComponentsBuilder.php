@@ -66,10 +66,15 @@ class ComponentsBuilder
         return $this->components;
     }
 
+    private function checkDuplicate(string $identifier, Schema $original, Schema $newObject): void
+    {
+        throw new DuplicateIdentifierException($identifier, json_encode($original->getSerializableData()), json_encode($newObject->getSerializableData()));
+    }
+
     public function setSchema(string $identifier, Schema $schema): self
     {
         if (isset($this->components->schemas[$identifier])) {
-            throw new DuplicateIdentifierException($identifier);
+            $this->checkDuplicate($identifier, $this->components->schemas[$identifier], $schema);
         }
         $schemas = $this->components->schemas;
         $schemas[$identifier] = $schema;

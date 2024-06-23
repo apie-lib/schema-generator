@@ -13,6 +13,7 @@ use Apie\SchemaGenerator\SchemaProviders\MetadataSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\UploadedFileSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ValueObjectSchemaProvider;
 
 class ComponentsBuilderFactory
@@ -34,6 +35,7 @@ class ComponentsBuilderFactory
     {
         return new self(
             new SchemaAttributeProvider(),
+            new UploadedFileSchemaProvider(),
             new ItemListSchemaProvider(),
             new ItemHashmapSchemaProvider(),
             new ItemSetSchemaProvider(),
