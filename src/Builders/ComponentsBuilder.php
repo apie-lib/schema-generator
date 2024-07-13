@@ -29,6 +29,8 @@ class ComponentsBuilder
 
     private Components $components;
 
+    private ?string $contentType = null;
+
     /**
      * @param SchemaProvider<object> $schemaProviders
      */
@@ -36,6 +38,28 @@ class ComponentsBuilder
     {
         $this->schemaProviders = $schemaProviders;
         $this->components = new Components([]);
+    }
+
+    public function runInContentType(?string $contentType, callable $callback): mixed
+    {
+        $previousContentType = $this->contentType;
+        try {
+            $this->contentType = $contentType;
+            return $callback();
+        } finally {
+            $this->contentType = $previousContentType;
+        }
+    }
+
+    public function setContentType(?string $contentType): self
+    {
+        $this->contentType = $contentType;
+        return $this;
+    }
+
+    public function getContentType(): ?string
+    {
+        return $this->contentType;
     }
 
     public function getMixedReference(): Reference
@@ -191,6 +215,9 @@ class ComponentsBuilder
         }
         $refl = new ReflectionClass($class);
         $identifier = Utils::getDisplayNameForValueObject($refl) . ($nullable ? '-nullable' : '') . '-post';
+        if ($this->contentType) {
+            $identifier .= '-' . str_replace('/', '-', $this->contentType);
+        }
         if (isset($this->components->schemas[$identifier])) {
             return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
         }

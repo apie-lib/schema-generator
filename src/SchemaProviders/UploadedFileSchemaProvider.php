@@ -24,7 +24,13 @@ class UploadedFileSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
+        $schema = new Schema(['type' => 'string', 'format' => 'path']);
+        if ($nullable) {
+            $schema->nullable = true;
+        }
+        $componentsBuilder->setSchema($componentIdentifier, $schema);
+
+        return $componentsBuilder->getComponents();
     }
 
     public function addCreationSchemaFor(
@@ -33,12 +39,29 @@ class UploadedFileSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $schema = new Schema([
-            'type' => 'string',
-            'format' => 'binary'
-        ]);
-        if ($nullable) {
-            $schema->nullable = true;
+        if ($componentsBuilder->getContentType() && str_starts_with($componentsBuilder->getContentType(), 'multipart/')) {
+            $schema = new Schema([
+                'type' => 'string',
+                'format' => 'filename',
+                'x-upload' => '*/*',
+                'nullable' => $nullable,
+            ]);
+        } else {
+            $schema = new Schema([
+                'type' => 'object',
+                'properties' => [
+                    'contents' => new Schema([
+                        'type' => 'string',
+                        'format' => 'binary',
+                    ]),
+                    'originalFilename' => new Schema([
+                        'type' => 'string',
+                        'format' => 'file',
+                    ])
+                ],
+                'required' => ['contents', 'originalFilename'],
+                'nullable' => $nullable,
+            ]);
         }
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
