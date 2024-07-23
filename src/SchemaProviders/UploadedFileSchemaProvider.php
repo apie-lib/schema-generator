@@ -1,9 +1,11 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
+use Apie\Core\ValueObjects\JsonFileUpload;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
+use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
 use Psr\Http\Message\UploadedFileInterface;
 use ReflectionClass;
@@ -42,26 +44,15 @@ class UploadedFileSchemaProvider implements SchemaProvider
         if ($componentsBuilder->getContentType() && str_starts_with($componentsBuilder->getContentType(), 'multipart/')) {
             $schema = new Schema([
                 'type' => 'string',
-                'format' => 'filename',
+                'format' => 'binary',
                 'x-upload' => '*/*',
                 'nullable' => $nullable,
             ]);
         } else {
-            $schema = new Schema([
-                'type' => 'object',
-                'properties' => [
-                    'contents' => new Schema([
-                        'type' => 'string',
-                        'format' => 'binary',
-                    ]),
-                    'originalFilename' => new Schema([
-                        'type' => 'string',
-                        'format' => 'file',
-                    ])
-                ],
-                'required' => ['contents', 'originalFilename'],
-                'nullable' => $nullable,
-            ]);
+            $schema = $componentsBuilder->addCreationSchemaFor(JsonFileUpload::class, nullable: $nullable);
+            if ($schema instanceof Reference) {
+                $schema = $componentsBuilder->getSchemaForReference($schema);
+            }
         }
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
