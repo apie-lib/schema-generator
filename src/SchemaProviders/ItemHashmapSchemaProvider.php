@@ -24,7 +24,19 @@ class ItemHashmapSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
+        $type = $class->getMethod('offsetGet')->getReturnType();
+        $schema = $componentsBuilder->getSchemaForType($type, display: true, nullable: $nullable);
+        $schema = new Schema([
+            'type' => 'object',
+            'additionalProperties' => $schema
+        ]);
+        if ($nullable) {
+            $schema->nullable = true;
+        }
+
+        $componentsBuilder->setSchema($componentIdentifier, $schema);
+
+        return $componentsBuilder->getComponents();
     }
 
     public function addCreationSchemaFor(
@@ -34,7 +46,7 @@ class ItemHashmapSchemaProvider implements SchemaProvider
         bool $nullable = false
     ): Components {
         $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, $nullable);
+        $schema = $componentsBuilder->getSchemaForType($type, display: false, nullable: $nullable);
         $schema = new Schema([
             'type' => 'object',
             'additionalProperties' => $schema

@@ -25,7 +25,11 @@ class ItemListSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
+        $type = $class->getMethod('offsetGet')->getReturnType();
+        $schema = $componentsBuilder->getSchemaForType($type, true, display: true, nullable: $nullable);
+        $componentsBuilder->setSchema($componentIdentifier, $schema);
+
+        return $componentsBuilder->getComponents();
     }
 
     public function addCreationSchemaFor(
@@ -35,7 +39,7 @@ class ItemListSchemaProvider implements SchemaProvider
         bool $nullable = false
     ): Components {
         $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, true, nullable: $nullable);
+        $schema = $componentsBuilder->getSchemaForType($type, true, display: false, nullable: $nullable);
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();
