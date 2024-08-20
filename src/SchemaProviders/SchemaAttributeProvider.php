@@ -57,7 +57,7 @@ class SchemaAttributeProvider implements SchemaProvider
             if (!$method->isStatic()) {
                 throw new MethodIsNotStaticException($method);
             }
-            $result = $method->invoke(null, $usage);
+            $result = $method->invoke(null, $usage, $componentsBuilder);
             if (is_array($result)) {
                 $result = new Schema($result);
             }
