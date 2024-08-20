@@ -168,6 +168,10 @@ class ComponentsBuilder
                 return new Schema(['type' => 'object', 'additionalProperties' => $this->getMixedReference()] + $map);
             case 'bool':
                 return new Schema(['type' => 'boolean'] + $map);
+            case 'true':
+                return new Schema(['type' => 'boolean', 'enum' => [true]]);
+            case 'false':
+                return new Schema(['type' => 'boolean', 'enum' => [false]]);
             case 'int':
                 return new Schema(['type' => 'integer'] + $map);
             case'float':
