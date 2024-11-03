@@ -174,7 +174,7 @@ class ComponentsBuilder
                 return new Schema(['type' => 'boolean', 'enum' => [false]]);
             case 'int':
                 return new Schema(['type' => 'integer'] + $map);
-            case'float':
+            case 'float':
             case 'double':
                 return new Schema(['type' => 'number'] + $map);
             case 'void':
@@ -211,7 +211,7 @@ class ComponentsBuilder
                 return new Schema(['type' => 'boolean'] + $map);
             case 'int':
                 return new Schema(['type' => 'integer'] + $map);
-            case'float':
+            case 'float':
             case 'double':
                 return new Schema(['type' => 'number'] + $map);
             case 'null':

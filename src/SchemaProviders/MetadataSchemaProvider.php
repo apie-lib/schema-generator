@@ -2,18 +2,28 @@
 namespace Apie\SchemaGenerator\SchemaProviders;
 
 use Apie\Core\Context\ApieContext;
+use Apie\Core\Enums\DoNotChangeUploadedFile;
 use Apie\Core\Enums\ScalarType;
 use Apie\Core\Metadata\EnumMetadata;
+use Apie\Core\Metadata\Fields\PublicProperty;
+use Apie\Core\Metadata\Fields\SetterMethod;
 use Apie\Core\Metadata\MetadataFactory;
 use Apie\Core\Metadata\MetadataInterface;
 use Apie\Core\Metadata\ScalarMetadata;
 use Apie\Core\Metadata\UnionTypeMetadata;
+use Apie\Core\Utils\ConverterUtils;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\ModifySchemaProvider;
+use Apie\TypeConverter\ReflectionTypeFactory;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
+use Psr\Http\Message\UploadedFileInterface;
 use ReflectionClass;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
+use ReflectionType;
+use ReflectionUnionType;
 
 /**
  * Get OpenAPI schema from the apie/core MetadataFactory class.
@@ -67,6 +77,27 @@ class MetadataSchemaProvider implements ModifySchemaProvider
         ]);
     }
 
+    private function uploadedFileCheck(?ReflectionType $type): ?ReflectionType
+    {
+        if ($type === null) {
+            return null;
+        }
+        if ($type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType) {
+            return $type;
+        }
+        assert($type instanceof ReflectionNamedType);
+        $class = ConverterUtils::toReflectionClass($type);
+        if ($class !== null && ($class->name === UploadedFileInterface::class || in_array(UploadedFileInterface::class, $class->getInterfaceNames()))) {
+            return ReflectionTypeFactory::createReflectionType(implode(
+                '|',
+                $type->allowsNull()
+                    ? [$class->name, DoNotChangeUploadedFile::class, 'null']
+                    : [$class->name, DoNotChangeUploadedFile::class]
+            ));
+        }
+        return $type;
+    }
+
     private function createSchemaForMetadata(ComponentsBuilder $componentsBuilder, MetadataInterface $metadata, bool $display, bool $nullable): Schema|Reference
     {
         $className = get_class($metadata);
@@ -81,6 +112,9 @@ class MetadataSchemaProvider implements ModifySchemaProvider
                 continue;
             }
             $type = $field->getTypehint();
+            if (!$display && ($field instanceof PublicProperty || $field instanceof SetterMethod)) {
+                $type = $this->uploadedFileCheck($type);
+            }
             $properties[$fieldName] = $type ? $componentsBuilder->getSchemaForType($type, false, $display) : $componentsBuilder->getMixedReference();
             if ($properties[$fieldName] instanceof Schema) {
                 $properties[$fieldName]->nullable = $field->allowsNull();
