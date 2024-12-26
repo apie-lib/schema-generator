@@ -11,9 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class ComponentsBuilderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_only_provide_simple_types_or_defined_schemas_with_no_schema_providers()
     {
         $testItem = new ComponentsBuilder();

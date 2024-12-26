@@ -73,7 +73,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
     {
         return new Schema([
             'type' => $metadata->toScalarType()->toJsonSchemaType(),
-            'enum' => $metadata->getOptions(new ApieContext()),
+            'enum' => array_values($metadata->getOptions(new ApieContext())),
         ]);
     }
 
