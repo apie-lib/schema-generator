@@ -13,6 +13,9 @@ use Apie\Fixtures\Enums\ColorEnum;
 use Apie\Fixtures\Enums\EmptyEnum;
 use Apie\Fixtures\Enums\IntEnum;
 use Apie\Fixtures\Enums\NoValueEnum;
+use Apie\Fixtures\FuturePhpVersion;
+use Apie\Fixtures\Php84\AsyncVisibility;
+use Apie\Fixtures\Php84\PropertyHooks;
 use Apie\SchemaGenerator\ComponentsBuilderFactory;
 use cebe\openapi\spec\Discriminator;
 use cebe\openapi\spec\Reference;
@@ -218,5 +221,38 @@ class ComponentsBuilderFactoryTest extends TestCase
             'Cow-post',
             Cow::class,
         ];
+
+        if (PHP_VERSION_ID >= 80400) {
+            FuturePhpVersion::loadPhp84Classes();
+            yield 'Object with property hooks' => [
+                new Schema([
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => new Schema(['type' => 'string', 'nullable' => false]),
+                        'virtualSetter' => new Schema(['type' => 'string', 'nullable' => false]),
+                    ],
+                    'required' => [
+                        'name',
+                    ],
+                ]),
+                'PropertyHooks-post',
+                PropertyHooks::class
+            ];
+            yield 'Object with async properties' => [
+                new Schema([
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => new Schema(['type' => 'string', 'nullable' => false]),
+                        'option' => new Schema(['type' => 'string', 'nullable' => false]),
+                    ],
+                    'required' => [
+                        'name',
+                        'option'
+                    ],
+                ]),
+                'AsyncVisibility-post',
+                AsyncVisibility::class
+            ];
+        }
     }
 }
