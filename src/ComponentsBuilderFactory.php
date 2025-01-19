@@ -15,6 +15,7 @@ use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\UploadedFileSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ValueObjectSchemaProvider;
+use cebe\openapi\spec\Components;
 
 class ComponentsBuilderFactory
 {
@@ -49,8 +50,11 @@ class ComponentsBuilderFactory
         );
     }
 
-    public function createComponentsBuilder(): ComponentsBuilder
+    public function createComponentsBuilder(?Components $components = null): ComponentsBuilder
     {
+        if ($components) {
+            return ComponentsBuilder::createWithExistingComponents($components, ...$this->schemaProviders);
+        }
         return new ComponentsBuilder(...$this->schemaProviders);
     }
 }

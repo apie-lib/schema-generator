@@ -40,6 +40,16 @@ class ComponentsBuilder
         $this->components = new Components([]);
     }
 
+    /**
+     * @param SchemaProvider<object> $schemaProviders
+     */
+    public static function createWithExistingComponents(Components $components, SchemaProvider... $schemaProviders): self
+    {
+        $res = new self(...$schemaProviders);
+        $res->components = $components;
+        return $res;
+    }
+
     public function runInContentType(?string $contentType, callable $callback): mixed
     {
         $previousContentType = $this->contentType;
