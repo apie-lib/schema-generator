@@ -196,6 +196,7 @@ class ComponentsBuilder
         if (isset($this->components->schemas[$identifier])) {
             return new Reference(['$ref' => '#/components/schemas/' . $identifier]);
         }
+
         foreach ($this->schemaProviders as $schemaProvider) {
             if ($schemaProvider->supports($refl)) {
                 $this->components = $schemaProvider->addDisplaySchemaFor($this, $identifier, $refl, $nullable);

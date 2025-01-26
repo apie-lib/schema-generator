@@ -3,6 +3,7 @@ namespace Apie\SchemaGenerator;
 
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\AliasSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateTimeSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateTimeZoneSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateValueObjectSchemaProvider;
@@ -36,6 +37,7 @@ class ComponentsBuilderFactory
     {
         return new self(
             new SchemaAttributeProvider(),
+            new AliasSchemaProvider(),
             new UploadedFileSchemaProvider(),
             new ItemListSchemaProvider(),
             new ItemHashmapSchemaProvider(),
