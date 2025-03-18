@@ -23,15 +23,17 @@ class DateValueObjectSchemaProvider implements SchemaProvider
     public function addDisplaySchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
     }
 
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
         $className = $class->name;
         $schema = new Schema([
@@ -40,6 +42,9 @@ class DateValueObjectSchemaProvider implements SchemaProvider
                 DateFormatToRegex::formatToRegex($className::getDateFormat())
             )
         ]);
+        if ($nullable) {
+            $schema->nullable = true;
+        }
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();

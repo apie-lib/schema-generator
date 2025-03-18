@@ -1,22 +1,22 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
-use Apie\Core\Lists\ItemList;
+use Apie\Core\Lists\ItemSet;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
 use ReflectionClass;
 
 /**
- * Creates schemas for Item Lists.
+ * Creates schemas for Item Sets.
  *
- * @implements SchemaProvider<ItemList>
+ * @implements SchemaProvider<ItemSet>
  */
-class ItemListSchemaProvider implements SchemaProvider
+class ItemSetSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return $class->isSubclassOf(ItemList::class) || $class->name === ItemList::class;
+        return $class->isSubclassOf(ItemSet::class) || $class->name === ItemSet::class;
     }
 
     public function addDisplaySchemaFor(
@@ -27,6 +27,7 @@ class ItemListSchemaProvider implements SchemaProvider
     ): Components {
         $type = $class->getMethod('offsetGet')->getReturnType();
         $schema = $componentsBuilder->getSchemaForType($type, true, display: true, nullable: $nullable);
+        $schema->uniqueItems = true;
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();
@@ -40,6 +41,7 @@ class ItemListSchemaProvider implements SchemaProvider
     ): Components {
         $type = $class->getMethod('offsetGet')->getReturnType();
         $schema = $componentsBuilder->getSchemaForType($type, true, display: false, nullable: $nullable);
+        $schema->uniqueItems = true;
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();

@@ -1,21 +1,23 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
-use Apie\Core\Lists\ItemHashmap;
+use Apie\Core\ValueObjects\JsonFileUpload;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
+use cebe\openapi\spec\Reference;
 use cebe\openapi\spec\Schema;
+use Psr\Http\Message\UploadedFileInterface;
 use ReflectionClass;
 
 /**
- * @implements SchemaProvider<ItemHashmap>
+ * @implements SchemaProvider<UploadedFileInterface>
  */
-class ItemHashmapSchemaProvider implements SchemaProvider
+class UploadedFileSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return $class->isSubclassOf(ItemHashmap::class) || $class->name === ItemHashmap::class;
+        return $class->name === UploadedFileInterface::class || in_array(UploadedFileInterface::class, $class->getInterfaceNames());
     }
 
     public function addDisplaySchemaFor(
@@ -24,16 +26,10 @@ class ItemHashmapSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, display: true, nullable: $nullable);
-        $schema = new Schema([
-            'type' => 'object',
-            'additionalProperties' => $schema
-        ]);
+        $schema = new Schema(['type' => 'string', 'format' => 'path']);
         if ($nullable) {
             $schema->nullable = true;
         }
-
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();
@@ -45,16 +41,19 @@ class ItemHashmapSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, display: false, nullable: $nullable);
-        $schema = new Schema([
-            'type' => 'object',
-            'additionalProperties' => $schema
-        ]);
-        if ($nullable) {
-            $schema->nullable = true;
+        if ($componentsBuilder->getContentType() && str_starts_with($componentsBuilder->getContentType(), 'multipart/')) {
+            $schema = new Schema([
+                'type' => 'string',
+                'format' => 'binary',
+                'x-upload' => '*/*',
+                'nullable' => $nullable,
+            ]);
+        } else {
+            $schema = $componentsBuilder->addCreationSchemaFor(JsonFileUpload::class, nullable: $nullable);
+            if ($schema instanceof Reference) {
+                $schema = $componentsBuilder->getSchemaForReference($schema);
+            }
         }
-
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();

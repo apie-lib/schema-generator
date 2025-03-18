@@ -1,22 +1,21 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
-use Apie\Core\Lists\ItemList;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
+use cebe\openapi\spec\Schema;
+use DateTimeZone;
 use ReflectionClass;
 
 /**
- * Creates schemas for Item Lists.
- *
- * @implements SchemaProvider<ItemList>
+ * @implements SchemaProvider<DateTimeZone>
  */
-class ItemListSchemaProvider implements SchemaProvider
+class DateTimeZoneSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return $class->isSubclassOf(ItemList::class) || $class->name === ItemList::class;
+        return $class->name === DateTimeZone::class || $class->isSubclassOf(DateTimeZone::class);
     }
 
     public function addDisplaySchemaFor(
@@ -25,11 +24,7 @@ class ItemListSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, true, display: true, nullable: $nullable);
-        $componentsBuilder->setSchema($componentIdentifier, $schema);
-
-        return $componentsBuilder->getComponents();
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
     }
 
     public function addCreationSchemaFor(
@@ -38,8 +33,20 @@ class ItemListSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $type = $class->getMethod('offsetGet')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, true, display: false, nullable: $nullable);
+        $schema = new Schema([
+            'type' => 'string',
+            'format' => 'datetimezone',
+            'pattern' => implode(
+                '|',
+                array_map(
+                    'preg_quote',
+                    DateTimeZone::listIdentifiers()
+                )
+            ),
+        ]);
+        if ($nullable) {
+            $schema->nullable = true;
+        }
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 
         return $componentsBuilder->getComponents();

@@ -2,12 +2,12 @@
 namespace Apie\SchemaGenerator\SchemaProviders;
 
 use Apie\Core\RegexUtils;
+use Apie\Core\ValueObjects\CompositeValueObject;
 use Apie\Core\ValueObjects\Interfaces\HasRegexValueObjectInterface;
 use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
 use cebe\openapi\spec\Components;
-use cebe\openapi\spec\Schema;
 use ReflectionClass;
 
 /**
@@ -18,23 +18,25 @@ class ValueObjectSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return $class->implementsInterface(ValueObjectInterface::class);
+        return $class->implementsInterface(ValueObjectInterface::class) && !in_array(CompositeValueObject::class, $class->getTraitNames());
     }
 
     public function addDisplaySchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, true);
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, true, $nullable);
     }
 
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, false);
+        return $this->getSchema($componentsBuilder, $componentIdentifier, $class, false, $nullable);
     }
 
     /**
@@ -44,10 +46,11 @@ class ValueObjectSchemaProvider implements SchemaProvider
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
         ReflectionClass $class,
-        bool $display
+        bool $display,
+        bool $nullable,
     ): Components {
         $type = $class->getMethod('toNative')->getReturnType();
-        $schema = $componentsBuilder->getSchemaForType($type, false, $display);
+        $schema = $componentsBuilder->getSchemaForType($type, false, $display, $nullable);
 
         if ($class->implementsInterface(HasRegexValueObjectInterface::class)) {
             $className = $class->name;

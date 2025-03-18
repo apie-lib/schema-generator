@@ -13,6 +13,9 @@ use Apie\Fixtures\Enums\ColorEnum;
 use Apie\Fixtures\Enums\EmptyEnum;
 use Apie\Fixtures\Enums\IntEnum;
 use Apie\Fixtures\Enums\NoValueEnum;
+use Apie\Fixtures\FuturePhpVersion;
+use Apie\Fixtures\Php84\AsyncVisibility;
+use Apie\Fixtures\Php84\PropertyHooks;
 use Apie\SchemaGenerator\ComponentsBuilderFactory;
 use cebe\openapi\spec\Discriminator;
 use cebe\openapi\spec\Reference;
@@ -26,10 +29,8 @@ class ComponentsBuilderFactoryTest extends TestCase
         return ComponentsBuilderFactory::createComponentsBuilderFactory();
     }
 
-    /**
-     * @test
-     * @dataProvider valueObjectProviders
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('valueObjectProviders')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function i_can_have_a_schema_of_value_object(
         Schema $expected,
         string $expectedKey,
@@ -49,7 +50,7 @@ class ComponentsBuilderFactoryTest extends TestCase
         $this->assertEquals($expected, $actualSchema);
     }
 
-    public function valueObjectProviders()
+    public static function valueObjectProviders()
     {
         yield 'Backed string enum' => [
             new Schema([
@@ -88,7 +89,6 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'type' => 'object',
                 'properties' => [
                 ],
-                'required' => [],
             ]),
             'EmptyDto-post',
             EmptyDto::class,
@@ -96,7 +96,6 @@ class ComponentsBuilderFactoryTest extends TestCase
         yield 'DTO with optional fields' => [
             new Schema([
                 'type' => 'object',
-                'required' => [],
                 'properties' => [
                     'string' => new Schema(['type' => 'string', 'nullable' => false]),
                     'integer' => new Schema(['type' => 'integer', 'nullable' => false]),
@@ -150,7 +149,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                     'nullableInteger' => new Schema(['type' => 'integer', 'nullable' => true]),
                     'nullableFloatingPoint' => new Schema(['type' => 'number', 'nullable' => true]),
                     'nullableTrueOrFalse' => new Schema(['type' => 'boolean', 'nullable' => true]),
-                    'nullableGender' => new Reference(['$ref' => '#/components/schemas/Gender-post']),
+                    'nullableGender' => new Reference(['$ref' => '#/components/schemas/Gender-nullable-post']),
                 ],
             ]),
             'NullableExampleDto-post',
@@ -159,8 +158,6 @@ class ComponentsBuilderFactoryTest extends TestCase
         yield 'DTO with nullable, optional fields' => [
             new Schema([
                 'type' => 'object',
-                'required' => [
-                ],
                 'properties' => [
                     'optionalString' => new Schema(['type' => 'string', 'nullable' => true]),
                     'optionalInteger' => new Schema(['type' => 'integer', 'nullable' => true]),
@@ -168,7 +165,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                     'optionalTrueOrFalse' => new Schema(['type' => 'boolean', 'nullable' => true]),
                     'mixed' => new Reference(['$ref' => '#/components/schemas/mixed']),
                     'noType' => new Reference(['$ref' => '#/components/schemas/mixed']),
-                    'optionalGender' => new Reference(['$ref' => '#/components/schemas/Gender-post']),
+                    'optionalGender' => new Reference(['$ref' => '#/components/schemas/Gender-nullable-post']),
                 ],
             ]),
             'OptionalExampleDto-post',
@@ -183,7 +180,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'properties' => [
                     'address' => new Reference(['$ref' => '#/components/schemas/AddressWithZipcodeCheck-post']),
                     'password' => new Reference(['$ref' => '#/components/schemas/Password-post']),
-                    'id' => new Reference(['$ref' => '#/components/schemas/UserWithAddressIdentifier-post']),
+                    'id' => new Reference(['$ref' => '#/components/schemas/UserWithAddressIdentifier-nullable-post']),
                 ],
             ]),
             'UserWithAddress-post',
@@ -192,6 +189,7 @@ class ComponentsBuilderFactoryTest extends TestCase
 
         yield 'Polymorphic relation' => [
             new Schema([
+                'type' => 'object',
                 'oneOf' => [
                     new Reference(['$ref' => '#/components/schemas/Cow-post']),
                     new Reference(['$ref' => '#/components/schemas/Elephant-post']),
@@ -200,9 +198,9 @@ class ComponentsBuilderFactoryTest extends TestCase
                 'discriminator' => new Discriminator([
                     'propertyName' => 'animalType',
                     'mapping' => [
-                        'cow' => new Reference(['$ref' => '#/components/schemas/Cow-post']),
-                        'elephant' => new Reference(['$ref' => '#/components/schemas/Elephant-post']),
-                        'fish' => new Reference(['$ref' => '#/components/schemas/Fish-post']),
+                        'cow' => '#/components/schemas/Cow-post',
+                        'elephant' => '#/components/schemas/Elephant-post',
+                        'fish' => '#/components/schemas/Fish-post',
                     ]
                 ])
             ]),
@@ -214,12 +212,47 @@ class ComponentsBuilderFactoryTest extends TestCase
             new Schema([
                 'type' => 'object',
                 'properties' => [
-                    'id' => new Reference(['$ref' => '#/components/schemas/AnimalIdentifier-post']),
+                    'id' => new Reference(['$ref' => '#/components/schemas/AnimalIdentifier-nullable-post']),
+                    'animalType' => new Schema(['type' => 'string', 'nullable' => false]),
+                    'hasMilk' => new Schema(['type' => 'boolean', 'nullable' => false]),
                 ],
-                'required' => [],
+                'required' => ['animalType'],
             ]),
             'Cow-post',
             Cow::class,
         ];
+
+        if (PHP_VERSION_ID >= 80400) {
+            FuturePhpVersion::loadPhp84Classes();
+            yield 'Object with property hooks' => [
+                new Schema([
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => new Schema(['type' => 'string', 'nullable' => false]),
+                        'virtualSetter' => new Schema(['type' => 'string', 'nullable' => false]),
+                    ],
+                    'required' => [
+                        'name',
+                    ],
+                ]),
+                'PropertyHooks-post',
+                PropertyHooks::class
+            ];
+            yield 'Object with async properties' => [
+                new Schema([
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => new Schema(['type' => 'string', 'nullable' => false]),
+                        'option' => new Schema(['type' => 'string', 'nullable' => false]),
+                    ],
+                    'required' => [
+                        'name',
+                        'option'
+                    ],
+                ]),
+                'AsyncVisibility-post',
+                AsyncVisibility::class
+            ];
+        }
     }
 }

@@ -26,15 +26,17 @@ class StringValueObjectSchemaProvider implements SchemaProvider
     public function addDisplaySchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
-        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class);
+        return $this->addCreationSchemaFor($componentsBuilder, $componentIdentifier, $class, $nullable);
     }
 
     public function addCreationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class
+        ReflectionClass $class,
+        bool $nullable = false
     ): Components {
         $format = strtolower(Utils::getDisplayNameForValueObject($class));
         if (class_exists(FormatsContainer::class) && !FormatsContainer::getFormat('string', $format)) {
@@ -47,6 +49,9 @@ class StringValueObjectSchemaProvider implements SchemaProvider
         if ($class->implementsInterface(HasRegexValueObjectInterface::class)) {
             $className = $class->name;
             $schema->pattern = RegexUtils::removeDelimiters($className::getRegularExpression());
+        }
+        if ($nullable) {
+            $schema->nullable = true;
         }
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 

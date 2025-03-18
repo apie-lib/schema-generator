@@ -7,8 +7,9 @@ use ReflectionClass;
 
 /**
  * @template T of object
+ * @extends SchemaProvider<T>
  */
-interface SchemaProvider
+interface ModifySchemaProvider extends SchemaProvider
 {
     /**
      * @param ReflectionClass<object> $class
@@ -18,20 +19,9 @@ interface SchemaProvider
     /**
      * @param ReflectionClass<T> $class
      */
-    public function addDisplaySchemaFor(
+    public function addModificationSchemaFor(
         ComponentsBuilder $componentsBuilder,
         string $componentIdentifier,
-        ReflectionClass $class,
-        bool $nullable = false
-    ): Components;
-
-    /**
-     * @param ReflectionClass<T> $class
-     */
-    public function addCreationSchemaFor(
-        ComponentsBuilder $componentsBuilder,
-        string $componentIdentifier,
-        ReflectionClass $class,
-        bool $nullable = false
+        ReflectionClass $class
     ): Components;
 }

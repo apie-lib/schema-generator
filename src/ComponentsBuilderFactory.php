@@ -3,19 +3,20 @@ namespace Apie\SchemaGenerator;
 
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
-use Apie\SchemaGenerator\SchemaProviders\CompositeValueObjectSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\AliasSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateTimeSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\DateTimeZoneSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateValueObjectSchemaProvider;
-use Apie\SchemaGenerator\SchemaProviders\DtoSchemaProvider;
-use Apie\SchemaGenerator\SchemaProviders\EntitySchemaProvider;
-use Apie\SchemaGenerator\SchemaProviders\EnumSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemHashmapSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemListSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\ItemSetSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\MetadataSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
-use Apie\SchemaGenerator\SchemaProviders\ThrowableSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\UploadedFileSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ValueObjectSchemaProvider;
+use cebe\openapi\spec\Components;
 
 class ComponentsBuilderFactory
 {
@@ -32,27 +33,30 @@ class ComponentsBuilderFactory
         $this->schemaProviders = $schemaProviders;
     }
 
-    public static function createComponentsBuilderFactory(bool $debug = false): self
+    public static function createComponentsBuilderFactory(): self
     {
         return new self(
             new SchemaAttributeProvider(),
-            new ThrowableSchemaProvider($debug),
+            new AliasSchemaProvider(),
+            new UploadedFileSchemaProvider(),
             new ItemListSchemaProvider(),
             new ItemHashmapSchemaProvider(),
+            new ItemSetSchemaProvider(),
             new PolymorphicEntitySchemaProvider(),
-            new DtoSchemaProvider(),
-            new EntitySchemaProvider(),
-            new CompositeValueObjectSchemaProvider(),
             new DateTimeSchemaProvider(),
+            new DateTimeZoneSchemaProvider(),
             new DateValueObjectSchemaProvider(),
             new StringValueObjectSchemaProvider(),
             new ValueObjectSchemaProvider(),
-            new EnumSchemaProvider()
+            new MetadataSchemaProvider(),
         );
     }
 
-    public function createComponentsBuilder(): ComponentsBuilder
+    public function createComponentsBuilder(?Components $components = null): ComponentsBuilder
     {
+        if ($components) {
+            return ComponentsBuilder::createWithExistingComponents($components, ...$this->schemaProviders);
+        }
         return new ComponentsBuilder(...$this->schemaProviders);
     }
 }
