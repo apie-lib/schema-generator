@@ -23,6 +23,14 @@ class SchemaGeneratorServiceProvider extends ServiceProvider
                 
             }
         );
+        $this->app->singleton(
+            \Apie\SchemaGenerator\SchemaGenerator::class,
+            function ($app) {
+                return new \Apie\SchemaGenerator\SchemaGenerator(
+                    $app->make(\Apie\SchemaGenerator\ComponentsBuilderFactory::class)
+                );
+            }
+        );
         
     }
 }
