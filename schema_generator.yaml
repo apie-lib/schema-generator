@@ -2,3 +2,7 @@ services:
   Apie\SchemaGenerator\ComponentsBuilderFactory:
     factory: Apie\SchemaGenerator\ComponentsBuilderFactory::createComponentsBuilderFactory
     arguments: []
+
+  Apie\SchemaGenerator\SchemaGenerator:
+    arguments:
+      - '@Apie\SchemaGenerator\ComponentsBuilderFactory'

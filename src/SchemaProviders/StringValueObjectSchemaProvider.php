@@ -4,6 +4,7 @@ namespace Apie\SchemaGenerator\SchemaProviders;
 use Apie\Core\RegexUtils;
 use Apie\Core\ValueObjects\Interfaces\HasRegexValueObjectInterface;
 use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
+use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
 use Apie\Core\ValueObjects\Utils;
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
@@ -20,7 +21,11 @@ class StringValueObjectSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return $class->implementsInterface(StringValueObjectInterface::class);
+        if (!in_array(ValueObjectInterface::class, $class->getInterfaceNames())) {
+            return false;
+        }
+        $returnType = (string) $class->getMethod('toNative')->getReturnType();
+        return $returnType === 'string' || $returnType === '?string';
     }
 
     public function addDisplaySchemaFor(
