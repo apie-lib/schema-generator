@@ -1,6 +1,7 @@
 <?php
 namespace Apie\SchemaGenerator\SchemaProviders;
 
+use Apie\Core\Attributes\Description;
 use Apie\Core\Context\ApieContext;
 use Apie\Core\Enums\DoNotChangeUploadedFile;
 use Apie\Core\Enums\ScalarType;
@@ -118,6 +119,15 @@ class MetadataSchemaProvider implements ModifySchemaProvider
             $properties[$fieldName] = $type ? $componentsBuilder->getSchemaForType($type, false, $display) : $componentsBuilder->getMixedReference();
             if ($properties[$fieldName] instanceof Schema) {
                 $properties[$fieldName]->nullable = $field->allowsNull();
+            }
+            if ($properties[$fieldName] instanceof Reference) {
+                foreach ($field->getAttributes(Description::class) as $descriptionAttribute) {
+                    $refSchema = $componentsBuilder->getSchemaForReference($properties[$fieldName]);
+                    if ($refSchema) {
+                        $refSchema->description = $descriptionAttribute->description;
+                    }
+                    break;
+                }
             }
         }
         $required = $metadata->getRequiredFields()->toArray();
