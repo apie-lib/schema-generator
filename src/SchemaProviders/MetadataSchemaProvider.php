@@ -78,7 +78,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
         ]);
     }
 
-    private function uploadedFileCheck(?ReflectionType $type): ?ReflectionType
+    private static function uploadedFileCheck(?ReflectionType $type): ?ReflectionType
     {
         if ($type === null) {
             return null;
@@ -99,14 +99,8 @@ class MetadataSchemaProvider implements ModifySchemaProvider
         return $type;
     }
 
-    private function createSchemaForMetadata(ComponentsBuilder $componentsBuilder, MetadataInterface $metadata, bool $display, bool $nullable): Schema|Reference
+    public static function applyPropertiesToSchema(Schema $schema, ComponentsBuilder $componentsBuilder, MetadataInterface $metadata, bool $display, bool $nullable): void
     {
-        $className = get_class($metadata);
-        if (isset($this->mapping[$className])) {
-            return $this->{$this->mapping[$className]}($componentsBuilder, $metadata, $display);
-        }
-
-        $schema = new Schema(['type' => 'object']);
         $properties = [];
         foreach ($metadata->getHashmap() as $fieldName => $field) {
             if (!$field->isField()) {
@@ -114,13 +108,13 @@ class MetadataSchemaProvider implements ModifySchemaProvider
             }
             $type = $field->getTypehint();
             if (!$display && ($field instanceof PublicProperty || $field instanceof SetterMethod)) {
-                $type = $this->uploadedFileCheck($type);
+                $type = self::uploadedFileCheck($type);
             }
-            $properties[$fieldName] = $type ? $componentsBuilder->getSchemaForType($type, false, $display) : $componentsBuilder->getMixedReference();
+            $properties[$fieldName] = $type ? $componentsBuilder->getSchemaForType($type, false, $display, $nullable) : $componentsBuilder->getMixedReference();
             if ($properties[$fieldName] instanceof Schema) {
-                $properties[$fieldName]->nullable = $field->allowsNull();
+                $properties[$fieldName]->nullable = $field->allowsNull() || $nullable;
             }
-            if ($properties[$fieldName] instanceof Reference) {
+            if ($properties[$fieldName] instanceof Reference && $properties[$fieldName]->getReference() !=='#/components/schemas/mixed') {
                 foreach ($field->getAttributes(Description::class) as $descriptionAttribute) {
                     $refSchema = $componentsBuilder->getSchemaForReference($properties[$fieldName]);
                     if ($refSchema) {
@@ -134,10 +128,23 @@ class MetadataSchemaProvider implements ModifySchemaProvider
         if (!empty($required)) {
             $schema->required = $required;
         }
+        if (!empty($properties) || $schema->type === 'object') {
+            $schema->properties = $properties;
+        }
+    }
+
+    private function createSchemaForMetadata(ComponentsBuilder $componentsBuilder, MetadataInterface $metadata, bool $display, bool $nullable): Schema|Reference
+    {
+        $className = get_class($metadata);
+        if (isset($this->mapping[$className])) {
+            return $this->{$this->mapping[$className]}($componentsBuilder, $metadata, $display);
+        }
+
+        $schema = new Schema(['type' => 'object']);
+        self::applyPropertiesToSchema($schema, $componentsBuilder, $metadata, $display, $nullable);
         if ($nullable) {
             $schema->nullable = true;
         }
-        $schema->properties = $properties;
         return $schema;
     }
 
