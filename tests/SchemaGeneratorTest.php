@@ -111,7 +111,7 @@ class SchemaGeneratorTest extends TestCase
                         'oneOf' => [
                             new Schema(['type' => 'string']),
                             new Schema(['type' => 'integer']),
-                            new Schema(['nullable' => true, 'default' => null]),     
+                            new Schema(['nullable' => true, 'default' => null]),
                         ],
                         'nullable' => true,
                     ]),
