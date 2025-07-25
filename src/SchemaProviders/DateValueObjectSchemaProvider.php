@@ -42,6 +42,7 @@ class DateValueObjectSchemaProvider implements SchemaProvider
                 DateFormatToRegex::formatToRegex($className::getDateFormat())
             )
         ]);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
         if ($nullable) {
             $schema->nullable = true;
         }

@@ -51,6 +51,7 @@ class ValueObjectSchemaProvider implements SchemaProvider
     ): Components {
         $type = $class->getMethod('toNative')->getReturnType();
         $schema = $componentsBuilder->getSchemaForType($type, false, $display, $nullable);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
 
         if ($class->implementsInterface(HasRegexValueObjectInterface::class)) {
             $className = $class->name;

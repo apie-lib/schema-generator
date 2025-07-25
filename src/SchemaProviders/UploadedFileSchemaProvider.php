@@ -26,7 +26,11 @@ class UploadedFileSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $schema = new Schema(['type' => 'string', 'format' => 'path']);
+        $schema = new Schema([
+            'type' => 'string',
+            'format' => 'path',
+        ]);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
         if ($nullable) {
             $schema->nullable = true;
         }
@@ -48,6 +52,7 @@ class UploadedFileSchemaProvider implements SchemaProvider
                 'x-upload' => '*/*',
                 'nullable' => $nullable,
             ]);
+            ComponentsBuilder::addDescriptionOfObject($schema, $class);
         } else {
             $schema = $componentsBuilder->addCreationSchemaFor(JsonFileUpload::class, nullable: $nullable);
             if ($schema instanceof Reference) {

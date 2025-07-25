@@ -72,6 +72,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
                 ),
             ]),
         ]);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
         MetadataSchemaProvider::applyPropertiesToSchema(
             $schema,
             $componentsBuilder,
@@ -119,6 +120,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
                 ),
             ]),
         ]);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
         MetadataSchemaProvider::applyPropertiesToSchema(
             $schema,
             $componentsBuilder,

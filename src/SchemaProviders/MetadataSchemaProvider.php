@@ -112,6 +112,9 @@ class MetadataSchemaProvider implements ModifySchemaProvider
             }
             $properties[$fieldName] = $type ? $componentsBuilder->getSchemaForType($type, false, $display, $nullable) : $componentsBuilder->getMixedReference();
             if ($properties[$fieldName] instanceof Schema) {
+                foreach ($field->getAttributes(Description::class) as $descriptionAttribute) {
+                    $properties[$fieldName]->description = $descriptionAttribute->description;
+                }
                 $properties[$fieldName]->nullable = $field->allowsNull() || $nullable;
             }
             if ($properties[$fieldName] instanceof Reference && $properties[$fieldName]->getReference() !=='#/components/schemas/mixed') {

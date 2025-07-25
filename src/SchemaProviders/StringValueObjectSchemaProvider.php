@@ -49,8 +49,9 @@ class StringValueObjectSchemaProvider implements SchemaProvider
         }
         $schema = new Schema([
             'type' => 'string',
-            'format' => $format
+            'format' => $format,
         ]);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
         if ($class->implementsInterface(HasRegexValueObjectInterface::class)) {
             $className = $class->name;
             $schema->pattern = RegexUtils::removeDelimiters($className::getRegularExpression());

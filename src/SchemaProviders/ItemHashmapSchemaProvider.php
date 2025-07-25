@@ -28,8 +28,9 @@ class ItemHashmapSchemaProvider implements SchemaProvider
         $schema = $componentsBuilder->getSchemaForType($type, display: true, nullable: $nullable);
         $schema = new Schema([
             'type' => 'object',
-            'additionalProperties' => $schema
+            'additionalProperties' => $schema,
         ]);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
         if ($nullable) {
             $schema->nullable = true;
         }
@@ -49,8 +50,9 @@ class ItemHashmapSchemaProvider implements SchemaProvider
         $schema = $componentsBuilder->getSchemaForType($type, display: false, nullable: $nullable);
         $schema = new Schema([
             'type' => 'object',
-            'additionalProperties' => $schema
+            'additionalProperties' => $schema,
         ]);
+        ComponentsBuilder::addDescriptionOfObject($schema, $class);
         if ($nullable) {
             $schema->nullable = true;
         }
