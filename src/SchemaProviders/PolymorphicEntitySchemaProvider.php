@@ -49,11 +49,13 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
         /** @var DiscriminatorMapping */
         $discriminatorMapping = $method->invoke(null);
 
+        $mapping = [];
         foreach ($discriminatorMapping->getConfigs() as $config) {
             $key = $config->getDiscriminator();
             $value = $componentsBuilder->addDisplaySchemaFor($config->getClassName(), $discriminatorMapping->getPropertyName(), nullable: $nullable);
             assert($value instanceof Reference);
             $relations[$key] = $value;
+            $mapping[] = $config->getDiscriminator();
             $schema = $componentsBuilder->getSchemaForReference($value);
             if ($schema) {
                 $this->fillInDiscriminator($schema, $discriminatorMapping->getPropertyName(), $config->getDiscriminator());
@@ -80,7 +82,13 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             true,
             $nullable
         );
-        
+        $properties = $schema->properties ?? [];
+        $properties[$discriminatorMapping->getPropertyName()] = new Schema([
+            'type' => 'string',
+            'enum' => $mapping,
+            'nullable' => false,
+        ]);       
+        $schema->properties = $properties; 
         $schema->required = [$discriminatorMapping->getPropertyName()];
 
         $componentsBuilder->setSchema($componentIdentifier, $schema);
@@ -93,15 +101,18 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
+        
         $relations = [];
         $method = $class->getMethod('getDiscriminatorMapping');
         /** @var DiscriminatorMapping */
         $discriminatorMapping = $method->invoke(null);
+        $mapping = [];
         foreach ($discriminatorMapping->getConfigs() as $config) {
             $key = $config->getDiscriminator();
             $value = $componentsBuilder->addCreationSchemaFor($config->getClassName(), $discriminatorMapping->getPropertyName());
             assert($value instanceof Reference);
             $relations[$key] = $value;
+            $mapping[] = $config->getDiscriminator();
             $schema = $componentsBuilder->getSchemaForReference($value);
             if ($schema) {
                 $this->fillInDiscriminator($schema, $discriminatorMapping->getPropertyName(), $config->getDiscriminator());
@@ -128,6 +139,13 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             false,
             $nullable
         );
+        $properties = $schema->properties ?? [];
+        $properties[$discriminatorMapping->getPropertyName()] = new Schema([
+            'type' => 'string',
+            'enum' => $mapping,
+            'nullable' => false,
+        ]);       
+        $schema->properties = $properties; 
         $schema->required = [$discriminatorMapping->getPropertyName()];
 
         $componentsBuilder->setSchema($componentIdentifier, $schema);

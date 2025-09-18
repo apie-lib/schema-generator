@@ -13,6 +13,7 @@ use cebe\openapi\spec\Schema;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\UploadedFileInterface;
 
 class SchemaGeneratorTest extends TestCase
 {
@@ -102,7 +103,7 @@ class SchemaGeneratorTest extends TestCase
             new Schema([
                 'type' => 'object',
                 'properties' => [
-                    'type' => new Schema(['type' => 'string', 'nullable' => false]),
+                    'type' => new Schema(['type' => 'string', 'nullable' => false, 'enum' => ['integer', 'string']]),
                     'id' => $idSchema,
                     'name' => $stringOrInt,
                     'value' => $stringOrInt,

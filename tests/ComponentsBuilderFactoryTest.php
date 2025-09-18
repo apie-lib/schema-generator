@@ -196,7 +196,7 @@ class ComponentsBuilderFactoryTest extends TestCase
                     new Reference(['$ref' => '#/components/schemas/Fish-post']),
                 ],
                 'properties' => [
-                    'animalType' => new Schema(['type' => 'string', 'nullable' => false]),
+                    'animalType' => new Schema(['type' => 'string', 'nullable' => false, 'enum' => ['cow', 'elephant', 'fish']]),
                     'id' => new Reference(['$ref' => '#/components/schemas/AnimalIdentifier-nullable-post']),
                     'hasMilk' => new Schema(['type' => 'boolean', 'nullable' => false]),
                     'starving' => new Schema(['type' => 'boolean', 'nullable' => false]),
