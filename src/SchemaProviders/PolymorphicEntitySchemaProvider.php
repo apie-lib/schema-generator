@@ -87,8 +87,8 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             'type' => 'string',
             'enum' => $mapping,
             'nullable' => false,
-        ]);       
-        $schema->properties = $properties; 
+        ]);
+        $schema->properties = $properties;
         $schema->required = [$discriminatorMapping->getPropertyName()];
 
         $componentsBuilder->setSchema($componentIdentifier, $schema);
@@ -144,8 +144,8 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
             'type' => 'string',
             'enum' => $mapping,
             'nullable' => false,
-        ]);       
-        $schema->properties = $properties; 
+        ]);
+        $schema->properties = $properties;
         $schema->required = [$discriminatorMapping->getPropertyName()];
 
         $componentsBuilder->setSchema($componentIdentifier, $schema);
