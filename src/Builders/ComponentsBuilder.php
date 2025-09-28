@@ -142,7 +142,7 @@ class ComponentsBuilder
         if ($type instanceof ReflectionIntersectionType) {
             $allOfs = [];
             foreach ($type->getTypes() as $allOfType) {
-                $allOfs[] = $this->$methodName((string) $allOfType, nullable: $nullable || $allOfType->allowsNull());
+                $allOfs[] = $this->$methodName((string) $allOfType, nullable: $allOfType->allowsNull());
             }
             $result = new Schema([
                 'allOf' => $allOfs,
@@ -150,13 +150,13 @@ class ComponentsBuilder
         } elseif ($type instanceof ReflectionUnionType) {
             $oneOfs = [];
             foreach ($type->getTypes() as $oneOfType) {
-                $oneOfs[] = $this->$methodName((string) $oneOfType, nullable: $nullable || $oneOfType->allowsNull());
+                $oneOfs[] = $this->$methodName((string) $oneOfType, nullable: $oneOfType->allowsNull());
             }
             $result = new Schema([
                 'oneOf' => $oneOfs,
             ] + $map);
         } elseif ($type instanceof ReflectionNamedType) {
-            $result = $this->$methodName($type->getName(), nullable: $nullable || $type->allowsNull());
+            $result = $this->$methodName($type->getName(), nullable: $type->allowsNull());
         }
         if ($array) {
             return new Schema([

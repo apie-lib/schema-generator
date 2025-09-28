@@ -51,7 +51,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
     {
         $oneOfs = [];
         foreach ($metadata->getTypes() as $type) {
-            $oneOfs[] = $this->createSchemaForMetadata($componentsBuilder, $metadata, $display, false);
+            $oneOfs[] = $this->createSchemaForMetadata($componentsBuilder, $type, $display, false);
         }
         return new Schema([
             'oneOf' => $oneOfs,
@@ -115,7 +115,7 @@ class MetadataSchemaProvider implements ModifySchemaProvider
                 foreach ($field->getAttributes(Description::class) as $descriptionAttribute) {
                     $properties[$fieldName]->description = $descriptionAttribute->description;
                 }
-                $properties[$fieldName]->nullable = $field->allowsNull() || $nullable;
+                $properties[$fieldName]->nullable = $field->allowsNull();
             }
             if ($properties[$fieldName] instanceof Reference && $properties[$fieldName]->getReference() !=='#/components/schemas/mixed') {
                 foreach ($field->getAttributes(Description::class) as $descriptionAttribute) {
