@@ -14,7 +14,7 @@ class SchemaGeneratorServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(
+        $this->registerSingleton(
             \Apie\SchemaGenerator\ComponentsBuilderFactory::class,
             function ($app) {
                 return call_user_func(
@@ -23,7 +23,7 @@ class SchemaGeneratorServiceProvider extends ServiceProvider
                 
             }
         );
-        $this->app->singleton(
+        $this->registerSingleton(
             \Apie\SchemaGenerator\SchemaGenerator::class,
             function ($app) {
                 return new \Apie\SchemaGenerator\SchemaGenerator(
