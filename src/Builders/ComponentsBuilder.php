@@ -3,6 +3,7 @@ namespace Apie\SchemaGenerator\Builders;
 
 use Apie\Core\Attributes\Context;
 use Apie\Core\Attributes\Description;
+use Apie\Core\Attributes\ExampleValue;
 use Apie\Core\Exceptions\DuplicateIdentifierException;
 use Apie\Core\ValueObjects\Utils;
 use Apie\SchemaGenerator\Exceptions\ICanNotExtractASchemaFromClassException;
@@ -267,11 +268,20 @@ class ComponentsBuilder
      */
     public static function addDescriptionOfObject(Schema $schema, ReflectionClass $class): void
     {
-        if ($schema->description) {
-            return;
+        if (!$schema->description) {
+            foreach ($class->getAttributes(Description::class) as $attribute) {
+                $schema->description = $attribute->newInstance()->description;
+            }
         }
-        foreach ($class->getAttributes(Description::class) as $attribute) {
-            $schema->description = $attribute->newInstance()->description;
+        if (!$schema->example) {
+            $examples = [];
+            foreach ($class->getAttributes(ExampleValue::class) as $attribute) {
+                $exampleValue = $attribute->newInstance();
+                $examples[$exampleValue->name] = $exampleValue->example;
+            }
+            if (count($examples) > 0) {
+                $schema->example = reset($examples);
+            }
         }
     }
 }
