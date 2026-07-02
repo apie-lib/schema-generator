@@ -1,7 +1,8 @@
 services:
   Apie\SchemaGenerator\ComponentsBuilderFactory:
     factory: Apie\SchemaGenerator\ComponentsBuilderFactory::createComponentsBuilderFactory
-    arguments: []
+    arguments:
+      - '%apie.open_api.max_enum_size%'
 
   Apie\SchemaGenerator\SchemaGenerator:
     arguments:

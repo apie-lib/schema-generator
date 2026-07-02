@@ -33,7 +33,7 @@ class ComponentsBuilderFactory
         $this->schemaProviders = $schemaProviders;
     }
 
-    public static function createComponentsBuilderFactory(): self
+    public static function createComponentsBuilderFactory(?int $maxEnumSize = 100): self
     {
         return new self(
             new SchemaAttributeProvider(),
@@ -46,7 +46,7 @@ class ComponentsBuilderFactory
             new DateTimeSchemaProvider(),
             new DateTimeZoneSchemaProvider(),
             new DateValueObjectSchemaProvider(),
-            new StringValueObjectSchemaProvider(),
+            new StringValueObjectSchemaProvider($maxEnumSize ?? 100),
             new ValueObjectSchemaProvider(),
             new MetadataSchemaProvider(),
         );

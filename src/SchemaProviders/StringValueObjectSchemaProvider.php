@@ -3,6 +3,7 @@ namespace Apie\SchemaGenerator\SchemaProviders;
 
 use Apie\Core\RegexUtils;
 use Apie\Core\ValueObjects\Interfaces\HasRegexValueObjectInterface;
+use Apie\Core\ValueObjects\Interfaces\LimitedOptionsInterface;
 use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
 use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
 use Apie\Core\ValueObjects\Utils;
@@ -19,6 +20,11 @@ use ReflectionClass;
  */
 class StringValueObjectSchemaProvider implements SchemaProvider
 {
+    public function __construct(
+        private readonly int $maxEnumSize = 100
+    ) {
+    }
+
     public function supports(ReflectionClass $class): bool
     {
         if (!in_array(ValueObjectInterface::class, $class->getInterfaceNames())) {
@@ -52,12 +58,20 @@ class StringValueObjectSchemaProvider implements SchemaProvider
             'format' => $format,
         ]);
         ComponentsBuilder::addDescriptionOfObject($schema, $class);
-        if ($class->implementsInterface(HasRegexValueObjectInterface::class)) {
+        if (in_array(HasRegexValueObjectInterface::class, $class->getInterfaceNames())) {
             $className = $class->name;
             $schema->pattern = RegexUtils::removeDelimiters($className::getRegularExpression());
         }
         if ($nullable) {
             $schema->nullable = true;
+        }
+        if (in_array(LimitedOptionsInterface::class, $class->getInterfaceNames())) {
+            /** @var class-string<LimitedOptionsInterface> $className */
+            $className = $class->name;
+            $options = $className::getOptions();
+            if (count($options) > 0 && count($options) <= $this->maxEnumSize) {
+                $schema->enum = $options->toArray();
+            }
         }
         $componentsBuilder->setSchema($componentIdentifier, $schema);
 

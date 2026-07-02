@@ -18,7 +18,8 @@ class SchemaGeneratorServiceProvider extends ServiceProvider
             \Apie\SchemaGenerator\ComponentsBuilderFactory::class,
             function ($app) {
                 return call_user_func(
-                    'Apie\\SchemaGenerator\\ComponentsBuilderFactory::createComponentsBuilderFactory'
+                    'Apie\\SchemaGenerator\\ComponentsBuilderFactory::createComponentsBuilderFactory',
+                    $this->parseArgument('%apie.open_api.max_enum_size%')
                 );
                 
             }
