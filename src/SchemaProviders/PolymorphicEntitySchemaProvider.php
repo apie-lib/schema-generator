@@ -20,7 +20,7 @@ class PolymorphicEntitySchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        if (!$class->implementsInterface(PolymorphicEntityInterface::class)) {
+        if (!in_array(PolymorphicEntityInterface::class, $class->getInterfaceNames())) {
             return false;
         }
         $method = $class->getMethod('getDiscriminatorMapping');

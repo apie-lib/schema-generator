@@ -7,6 +7,7 @@ use Apie\SchemaGenerator\SchemaProviders\AliasSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateTimeSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateTimeZoneSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\DateValueObjectSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\DurationSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemHashmapSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemListSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ItemSetSchemaProvider;
@@ -15,6 +16,7 @@ use Apie\SchemaGenerator\SchemaProviders\PolymorphicEntitySchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\SchemaAttributeProvider;
 use Apie\SchemaGenerator\SchemaProviders\StringValueObjectSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\UploadedFileSchemaProvider;
+use Apie\SchemaGenerator\SchemaProviders\UriSchemaProvider;
 use Apie\SchemaGenerator\SchemaProviders\ValueObjectSchemaProvider;
 use cebe\openapi\spec\Components;
 
@@ -48,6 +50,8 @@ class ComponentsBuilderFactory
             new DateValueObjectSchemaProvider(),
             new StringValueObjectSchemaProvider($maxEnumSize ?? 100),
             new ValueObjectSchemaProvider(),
+            new DurationSchemaProvider(),
+            new UriSchemaProvider(),
             new MetadataSchemaProvider(),
         );
     }

@@ -13,9 +13,11 @@ enum SchemaUsages: string
 
     public function toSchema(ComponentsBuilder $componentsBuilder, string $className, bool $nullable = false): Schema|Reference
     {
+        if ($this === self::MODIFY) {
+            return $componentsBuilder->addModificationSchemaFor($className);
+        }
         $method = match($this) {
             self::CREATE => 'addCreationSchemaFor',
-            self::MODIFY => 'addModificationSchemaFor',
             default => 'addDisplaySchemaFor'
         };
         return $componentsBuilder->$method($className, nullable: $nullable);

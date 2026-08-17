@@ -43,7 +43,7 @@ class SchemaAttributeProvider implements SchemaProvider
     }
 
     /**
-     * @param ReflectionClass<object> $class
+     * @param ReflectionClass<covariant object> $class
      */
     private function getSchema(
         ComponentsBuilder $componentsBuilder,

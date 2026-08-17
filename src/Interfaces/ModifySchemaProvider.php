@@ -12,7 +12,7 @@ use ReflectionClass;
 interface ModifySchemaProvider extends SchemaProvider
 {
     /**
-     * @param ReflectionClass<object> $class
+     * @param ReflectionClass<covariant object> $class
      */
     public function supports(ReflectionClass $class): bool;
 

@@ -264,7 +264,7 @@ class ComponentsBuilder
     }
 
     /**
-     * @param ReflectionClass<object> $class
+     * @param ReflectionClass<covariant object> $class
      */
     public static function addDescriptionOfObject(Schema $schema, ReflectionClass $class): void
     {
