@@ -1,0 +1,5 @@
+{
+    "type": "string",
+    "format": "uri",
+    "example": "https://www.example.com/path?query#hash"
+}

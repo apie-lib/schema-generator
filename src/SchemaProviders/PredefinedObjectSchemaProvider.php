@@ -3,29 +3,39 @@ namespace Apie\SchemaGenerator\SchemaProviders;
 
 use Apie\SchemaGenerator\Builders\ComponentsBuilder;
 use Apie\SchemaGenerator\Interfaces\SchemaProvider;
+use BcMath\Number;
 use cebe\openapi\spec\Components;
 use cebe\openapi\spec\Schema;
+use GMP;
 use ReflectionClass;
 use Uri\Rfc3986\Uri;
 
 /**
- * @implements SchemaProvider<Uri>
+ * @implements SchemaProvider<Uri|GMP|Number>
  */
-class UriSchemaProvider implements SchemaProvider
+class PredefinedObjectSchemaProvider implements SchemaProvider
 {
     public function supports(ReflectionClass $class): bool
     {
-        return $class->name === Uri::class;
+        return in_array(
+            $class->name,
+            [
+                Uri::class,
+                Number::class,
+                GMP::class,
+            ]
+        );
     }
 
-    private function createSchema(): Schema
+    /**
+     * @param ReflectionClass<covariant object> $class
+     */
+    private function createSchema(ReflectionClass $class): Schema
     {
-        // json_encode Duration returns this structure: {"seconds":0,"nanoseconds":6000000,"negative":false}
-        return new Schema([
-            'type' => 'string',
-            'format' => 'uri',
-            'example' => 'https://www.example.com/path?query#hash',
-        ]);
+        $fixturePath = __DIR__ . '/../../fixtures/' . str_replace('\\', '_', $class->name) . '.json';
+        $data = json_decode(file_get_contents($fixturePath), true, flags: JSON_THROW_ON_ERROR);
+        assert(is_array($data));
+        return new Schema($data);
     }
 
     public function addDisplaySchemaFor(
@@ -34,7 +44,7 @@ class UriSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $schema = $this->createSchema();
+        $schema = $this->createSchema($class);
         if ($nullable) {
             $schema->nullable = true;
         }
@@ -49,7 +59,7 @@ class UriSchemaProvider implements SchemaProvider
         ReflectionClass $class,
         bool $nullable = false
     ): Components {
-        $schema = $this->createSchema();
+        $schema = $this->createSchema($class);
         if ($nullable) {
             $schema->nullable = true;
         }

@@ -1,0 +1,7 @@
+{
+    "type": "string",
+    "format": "bigint",
+    "regex":"^[1-9][0-9]*$",
+    "example": "1234547648759975",
+    "description": "Large integers written down as a string"
+}

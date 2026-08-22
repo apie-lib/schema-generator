@@ -20,10 +20,10 @@
     }
   },
   "require": {
-    "php": ">=8.3",
+    "php": ">=8.4",
     "apie/core": "self.version",
     "apie/dateformat-to-regex": "self.version",
-    "devizzent/cebe-php-openapi": "^1.1.2"
+    "devizzent/cebe-php-openapi": "^1.1.5"
   },
   "require-dev": {
     "apie/common-value-objects": "self.version",
@@ -33,7 +33,7 @@
     "apie/text-value-objects": "self.version",
     "illuminate/support": "*",
     "phpunit/phpunit": "^11.5.2",
-    "phpspec/prophecy-phpunit": "^2.2"
+    "phpspec/prophecy-phpunit": "^2.5"
   },
   "extra": {
     "apie-objects": [
