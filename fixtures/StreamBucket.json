@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "required": ["data", "dataLength"],
+    "properties": {
+        "data": { "type": "string", "format": "binary", "nullable": false },
+        "dataLength": { "type": "integer",  "minimum": 0, "nullable": false }
+    }
+}

@@ -1,0 +1,4 @@
+{
+    "type": "string",
+    "pattern": "^(unsigned\\s+|long\\s+|short\\s+|signed\\s+|long\\s+long\\s+)*(int|char|bool|float|double)(\\[[1-9][0-9]*\\])*$"
+}
