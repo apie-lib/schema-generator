@@ -1,0 +1,5 @@
+{
+    "type": "string",
+    "format": "duration",
+    "description": "A duration in ISO 8601 format, e.g., 'P3Y6M4DT12H30M5S' represents a duration of 3 years, 6 months, 4 days, 12 hours, 30 minutes, and 5 seconds."
+}

@@ -1,3 +1,5 @@
 {
-    "type": "string"
+    "type": "string",
+    "example": "title=\"Hello &amp; goodbye\"",
+    "pattern": "^[^=]+=\"[^\"]*\"$"
 }
