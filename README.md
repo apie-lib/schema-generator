@@ -14,11 +14,16 @@ This package is part of the [Apie](https://github.com/apie-lib) library.
 The code is maintained in a monorepo, so PR's need to be sent to the [monorepo](https://github.com/apie-lib/apie-lib-monorepo/pulls)
 
 ## Documentation
-The schema generator creates a JSON Schema from an object with typehints. It supports entities, lists, hashmaps, value objects and DTO made for Apie. It returns objects made with the library [cebe/php-openapi](https://github.com/cebe/php-openapi).
+The schema generator creates a JSON Schema from an object with typehints. It supports entities, lists, hashmaps, value objects and DTO made for Apie. It returns objects made with the library [devizzent/cebe-php-openapi](https://github.com/devizzent/cebe-php-openapi) (a maintained fork of the abandoned cebe/php-openapi).
 
 This library does not generate an entire OpenAPI schema, but instead it just creates the JSON schema section of all the objects.
 
-### Standard usage
+### Standalone usage
+Install it with:
+```bash
+composer require apie/schema-generator
+```
+
 In general you make multiple schemas for multiple objects with references. Because of that we basically create a [Components section](https://spec.openapis.org/oas/v3.1.0#components-object)
 
 Code example:
@@ -44,6 +49,17 @@ $schema = $factory->addCreationSchemaFor(DateTimeRange::class);
 // $components = ['mixed', 'Gender-post', 'DateTimeRange-post', 'DateWithTimezone-post']
 $components = array_keys($factory->getComponents()->schemas);
 ```
+
+If you only need the schema of a single object (or method), without recursively registering it
+and its references in a components section, use `Apie\SchemaGenerator\SchemaGenerator` instead:
+```php
+use Apie\SchemaGenerator\SchemaGenerator;
+
+$schema = $schemaGenerator->createSchema(Gender::class);
+// or for the input/output of a single method:
+$schema = $schemaGenerator->createMethodSchema($reflectionMethod);
+```
+It resolves references internally, so the returned `cebe\openapi\spec\Schema` is self-contained.
 
 ### DTO's
 DTO's will be mapped as objects and all fields required unless it has the Optional attribute or a default value.
@@ -119,4 +135,14 @@ class Example implements StringValueObject {
     }
 }
 ```
-The method can return an instance of cebe\Openapi\Schema (you require cebe/php-openapi") or return an array of the schema.
+The method can return an instance of cebe\Openapi\Schema (you require devizzent/cebe-php-openapi) or return an array of the schema.
+
+### Symfony integration
+Via `apie/apie-bundle`, `schema_generator.yaml` registers `ComponentsBuilderFactory` (configured
+with the `apie.open_api.max_enum_size` parameter) and `Apie\SchemaGenerator\SchemaGenerator` as
+services, so other Apie packages such as `apie/rest-api` can inject them directly.
+
+### Laravel integration
+Via `apie/laravel-apie`, the generated `Apie\SchemaGenerator\SchemaGeneratorServiceProvider`
+registers the same `ComponentsBuilderFactory` and `SchemaGenerator` services for use by other
+Apie packages.

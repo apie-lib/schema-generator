@@ -14,6 +14,7 @@ use FFI\CData;
 use FFI\CType;
 use GMP;
 use ReflectionClass;
+use ReflectionMethod;
 use SimpleXMLElement;
 use StreamBucket;
 use Uri\Rfc3986\Uri;
@@ -39,6 +40,8 @@ class PredefinedObjectSchemaProvider implements SchemaProvider
                 DOMElement::class,
                 DateInterval::class,
                 Closure::class,
+                ReflectionClass::class,
+                ReflectionMethod::class,
             ]
         );
     }
