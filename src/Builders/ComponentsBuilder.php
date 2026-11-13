@@ -277,7 +277,7 @@ class ComponentsBuilder
             $examples = [];
             foreach ($class->getAttributes(ExampleValue::class) as $attribute) {
                 $exampleValue = $attribute->newInstance();
-                $examples[$exampleValue->name] = $exampleValue->example;
+                $examples[$exampleValue->name ?? ''] = $exampleValue->example;
             }
             if (count($examples) > 0) {
                 $schema->example = reset($examples);
